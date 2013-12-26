@@ -7,9 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9A8BC826186CDF6C00E09A7A /* PIOCreateItemRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A8BC825186CDF6C00E09A7A /* PIOCreateItemRequest.m */; };
+		9A8BC829186CE12D00E09A7A /* PIOCreateUserRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A8BC828186CE12D00E09A7A /* PIOCreateUserRequest.m */; };
+		9A8BC82C186CE34000E09A7A /* PIOItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A8BC82B186CE34000E09A7A /* PIOItem.m */; };
+		9A8BC82F186CE44600E09A7A /* PIOItemRecGetTopNRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A8BC82E186CE44600E09A7A /* PIOItemRecGetTopNRequest.m */; };
+		9A8BC832186CE77800E09A7A /* PIOItemSimGetTopNRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A8BC831186CE77800E09A7A /* PIOItemSimGetTopNRequest.m */; };
+		9A8BC835186CEC5000E09A7A /* PIOUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A8BC834186CEC5000E09A7A /* PIOUser.m */; };
+		9A8BC838186CEDF000E09A7A /* PIOUserActionItemRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A8BC837186CEDF000E09A7A /* PIOUserActionItemRequest.m */; };
 		9A974175186CC23600BE4C94 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A974174186CC23600BE4C94 /* Foundation.framework */; };
-		9A97417A186CC23600BE4C94 /* PredictionIOSDK.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9A974179186CC23600BE4C94 /* PredictionIOSDK.h */; };
-		9A97417C186CC23600BE4C94 /* PredictionIOSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A97417B186CC23600BE4C94 /* PredictionIOSDK.m */; };
+		9A97417A186CC23600BE4C94 /* PIOClient.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9A974179186CC23600BE4C94 /* PIOClient.h */; };
+		9A97417C186CC23600BE4C94 /* PIOClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A97417B186CC23600BE4C94 /* PIOClient.m */; };
 		9A974183186CC23600BE4C94 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A974182186CC23600BE4C94 /* XCTest.framework */; };
 		9A974184186CC23600BE4C94 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A974174186CC23600BE4C94 /* Foundation.framework */; };
 		9A974186186CC23600BE4C94 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A974185186CC23600BE4C94 /* UIKit.framework */; };
@@ -35,18 +42,32 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
-				9A97417A186CC23600BE4C94 /* PredictionIOSDK.h in CopyFiles */,
+				9A97417A186CC23600BE4C94 /* PIOClient.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		9A8BC824186CDF6C00E09A7A /* PIOCreateItemRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PIOCreateItemRequest.h; sourceTree = "<group>"; };
+		9A8BC825186CDF6C00E09A7A /* PIOCreateItemRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PIOCreateItemRequest.m; sourceTree = "<group>"; };
+		9A8BC827186CE12D00E09A7A /* PIOCreateUserRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PIOCreateUserRequest.h; sourceTree = "<group>"; };
+		9A8BC828186CE12D00E09A7A /* PIOCreateUserRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PIOCreateUserRequest.m; sourceTree = "<group>"; };
+		9A8BC82A186CE34000E09A7A /* PIOItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PIOItem.h; sourceTree = "<group>"; };
+		9A8BC82B186CE34000E09A7A /* PIOItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PIOItem.m; sourceTree = "<group>"; };
+		9A8BC82D186CE44600E09A7A /* PIOItemRecGetTopNRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PIOItemRecGetTopNRequest.h; sourceTree = "<group>"; };
+		9A8BC82E186CE44600E09A7A /* PIOItemRecGetTopNRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PIOItemRecGetTopNRequest.m; sourceTree = "<group>"; };
+		9A8BC830186CE77800E09A7A /* PIOItemSimGetTopNRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PIOItemSimGetTopNRequest.h; sourceTree = "<group>"; };
+		9A8BC831186CE77800E09A7A /* PIOItemSimGetTopNRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PIOItemSimGetTopNRequest.m; sourceTree = "<group>"; };
+		9A8BC833186CEC5000E09A7A /* PIOUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PIOUser.h; sourceTree = "<group>"; };
+		9A8BC834186CEC5000E09A7A /* PIOUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PIOUser.m; sourceTree = "<group>"; };
+		9A8BC836186CEDF000E09A7A /* PIOUserActionItemRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PIOUserActionItemRequest.h; sourceTree = "<group>"; };
+		9A8BC837186CEDF000E09A7A /* PIOUserActionItemRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PIOUserActionItemRequest.m; sourceTree = "<group>"; };
 		9A974171186CC23600BE4C94 /* libPredictionIO-iOS-SDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPredictionIO-iOS-SDK.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9A974174186CC23600BE4C94 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		9A974178186CC23600BE4C94 /* PredictionIO-iOS-SDK-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PredictionIO-iOS-SDK-Prefix.pch"; sourceTree = "<group>"; };
-		9A974179186CC23600BE4C94 /* PredictionIOSDK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PredictionIOSDK.h; sourceTree = "<group>"; };
-		9A97417B186CC23600BE4C94 /* PredictionIOSDK.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PredictionIOSDK.m; sourceTree = "<group>"; };
+		9A974179186CC23600BE4C94 /* PIOClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PIOClient.h; sourceTree = "<group>"; };
+		9A97417B186CC23600BE4C94 /* PIOClient.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PIOClient.m; sourceTree = "<group>"; };
 		9A974181186CC23600BE4C94 /* PredictionIO-iOS-SDKTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "PredictionIO-iOS-SDKTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9A974182186CC23600BE4C94 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		9A974185186CC23600BE4C94 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -110,8 +131,22 @@
 		9A974176186CC23600BE4C94 /* PredictionIO-iOS-SDK */ = {
 			isa = PBXGroup;
 			children = (
-				9A974179186CC23600BE4C94 /* PredictionIOSDK.h */,
-				9A97417B186CC23600BE4C94 /* PredictionIOSDK.m */,
+				9A974179186CC23600BE4C94 /* PIOClient.h */,
+				9A97417B186CC23600BE4C94 /* PIOClient.m */,
+				9A8BC82A186CE34000E09A7A /* PIOItem.h */,
+				9A8BC82B186CE34000E09A7A /* PIOItem.m */,
+				9A8BC833186CEC5000E09A7A /* PIOUser.h */,
+				9A8BC834186CEC5000E09A7A /* PIOUser.m */,
+				9A8BC824186CDF6C00E09A7A /* PIOCreateItemRequest.h */,
+				9A8BC825186CDF6C00E09A7A /* PIOCreateItemRequest.m */,
+				9A8BC827186CE12D00E09A7A /* PIOCreateUserRequest.h */,
+				9A8BC828186CE12D00E09A7A /* PIOCreateUserRequest.m */,
+				9A8BC82D186CE44600E09A7A /* PIOItemRecGetTopNRequest.h */,
+				9A8BC82E186CE44600E09A7A /* PIOItemRecGetTopNRequest.m */,
+				9A8BC830186CE77800E09A7A /* PIOItemSimGetTopNRequest.h */,
+				9A8BC831186CE77800E09A7A /* PIOItemSimGetTopNRequest.m */,
+				9A8BC836186CEDF000E09A7A /* PIOUserActionItemRequest.h */,
+				9A8BC837186CEDF000E09A7A /* PIOUserActionItemRequest.m */,
 				9A974177186CC23600BE4C94 /* Supporting Files */,
 			);
 			path = "PredictionIO-iOS-SDK";
@@ -224,7 +259,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9A97417C186CC23600BE4C94 /* PredictionIOSDK.m in Sources */,
+				9A8BC829186CE12D00E09A7A /* PIOCreateUserRequest.m in Sources */,
+				9A8BC82F186CE44600E09A7A /* PIOItemRecGetTopNRequest.m in Sources */,
+				9A8BC838186CEDF000E09A7A /* PIOUserActionItemRequest.m in Sources */,
+				9A97417C186CC23600BE4C94 /* PIOClient.m in Sources */,
+				9A8BC826186CDF6C00E09A7A /* PIOCreateItemRequest.m in Sources */,
+				9A8BC82C186CE34000E09A7A /* PIOItem.m in Sources */,
+				9A8BC832186CE77800E09A7A /* PIOItemSimGetTopNRequest.m in Sources */,
+				9A8BC835186CEC5000E09A7A /* PIOUser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -409,6 +451,7 @@
 				9A974196186CC23600BE4C94 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		9A974197186CC23600BE4C94 /* Build configuration list for PBXNativeTarget "PredictionIO-iOS-SDKTests" */ = {
 			isa = XCConfigurationList;
@@ -417,6 +460,7 @@
 				9A974199186CC23600BE4C94 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

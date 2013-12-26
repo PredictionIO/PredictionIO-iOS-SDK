@@ -1,5 +1,5 @@
 //
-//  PredictionIO_iOS_SDK.h
+//  PIOItem.h
 //  PredictionIO-iOS-SDK
 //
 //  Created by Yanbin Feng on 12/26/13.
@@ -8,6 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-@interface PredictionIOSDK : NSObject
+@interface PIOItem : NSObject
 
 @end
