@@ -10,4 +10,8 @@
 
 @interface PIOUser : NSObject
 
+@property (strong, nonatomic) NSString *uid;
+@property (strong, nonatomic) NSNumber *latitude;
+@property (strong, nonatomic) NSNumber *longitude;
+
 @end

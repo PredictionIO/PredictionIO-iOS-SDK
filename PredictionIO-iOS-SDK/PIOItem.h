@@ -10,4 +10,11 @@
 
 @interface PIOItem : NSObject
 
+@property (strong, nonatomic) NSString *iid;
+@property (strong, nonatomic) NSArray *itypes;
+@property (strong, nonatomic) NSDate *startT;
+@property (strong, nonatomic) NSDate *endT;
+@property (strong, nonatomic) NSNumber *latitude;
+@property (strong, nonatomic) NSNumber *longitude;
+
 @end

@@ -10,4 +10,18 @@
 
 @implementation PIOItemRecGetTopNRequest
 
+- (id)initWithApiUrl:(NSString *)apiUrl apiFormat:(NSString *)apiFormat appkey:(NSString *)appkey engine:(NSString *)engine uid:(NSString *)uid n:(NSInteger)n
+{
+    self = [super init];
+    if (self) {
+        [self setApiUrl:apiUrl];
+        [self setApiFormat:apiFormat];
+        [self setAppkey:appkey];
+        [self setEngine:engine];
+        [self setUid:uid];
+        [self setN:[NSNumber numberWithInteger:n]];
+    }
+    return self;
+}
+
 @end

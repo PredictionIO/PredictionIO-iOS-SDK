@@ -17,23 +17,23 @@
 
 @interface PIOClient : NSObject
 
-//Note: all requests are async by default (built on top of AFNetworking).
-//TODO: add sync requests later
+@property (strong, nonatomic) NSString *apiUrl;
+@property (strong, nonatomic) NSString *appkey;
+@property (strong, nonatomic) NSString *uid;
 
-//Instantiate a PredictionIO RESTful API client using default values for API URL and thread limit.
-- (id)initWithAppKey:(NSString *)appkey;
+
+//Note: all requests are async by default (built on top of AFNetworking).
+//TODO: add sync requests later, and other unimplemented methods.
 
 //Instantiate a PredictionIO RESTful API client using default values for API URL.
 - (id)initWithAppKey:(NSString *)appkey apiURL:(NSString *)apiURL;
-
-//Instantiate a PredictionIO RESTful API client.
-- (id)initWithAppKey:(NSString *)appkey apiURL:(NSString *)apiURL threadLimit:(NSInteger)threadLimit;
 
 //Close all connections associated with this client.
 - (void)close;
 
 //Sends an asynchronous create item request to the API.
-- (void)createItem:(PIOCreateItemRequest *)createItemRequest;
+- (void)createItemWithRequest:(PIOCreateItemRequest *)createItemRequest;
+- (void)createItemWithIID:(NSString *)iid itypes:(NSArray *)itypes;
 
 //Sends an asynchronous delete item request to the API.
 - (void)deleteItem:(NSString *)iid;
@@ -42,7 +42,8 @@
 - (PIOItem *)getItem:(NSString *)iid;
 
 //Sends an asynchronous create user request to the API.
-- (void)createUser:(PIOCreateUserRequest *)createUserRequest;
+- (void)createUserWithRequest:(PIOCreateUserRequest *)createUserRequest;
+- (void)createUserWithUID:(NSString *)uid;
 
 //Sends an asynchronous delete user request to the API.
 - (void)deleteUser:(NSString *)uid;
@@ -57,19 +58,23 @@
 - (PIOItemRecGetTopNRequest *)newItemRecGetTopNRequestWithEngine:(NSString *)engine uid:(NSString *)uid n:(NSInteger)n attributes:(NSArray *)attributes;
 
 //Sends an asynchronous get recommendations request to the API.
-- (NSArray *)getItemRecTopN:(PIOItemRecGetTopNRequest *)itemTopNRequest;
+- (NSArray *)getItemRecTopNWithRequest:(PIOItemRecGetTopNRequest *)itemTopNRequest;
+- (NSArray *)getItemRecTopNWithEngine:(NSString *)engine uid:(NSString *)uid n:(NSInteger)n;
 
 //Sends an asynchronous get recommendations request to the API.
-- (NSDictionary *)getItemRecTopNWithAttributes:(PIOItemRecGetTopNRequest *)itemTopNRequest;
+- (NSDictionary *)getItemRecTopNWithAttributesWithRequest:(PIOItemRecGetTopNRequest *)itemTopNRequest;
+- (NSDictionary *)getItemRecTopNWithAttributesWithEngine:(NSString *)engine uid:(NSString *)uid n:(NSInteger)n attributes:(NSArray *)attributes;
 
 //Get a new get top-n similar items request object that can be used to add additional request parameters.
 - (PIOItemSimGetTopNRequest *)newItemSimGetTopNRequestWithEngine:(NSString *)engine iid:(NSString *)iid n:(NSInteger)n attributes:(NSArray *)attributes;
 
 //Sends an asynchronous get similar items request to the API.
-- (NSArray *)getItemSimTopN:(PIOItemSimGetTopNRequest *)itemSimTopNRequest;
+- (NSArray *)getItemSimTopNWithRequest:(PIOItemSimGetTopNRequest *)itemSimTopNRequest;
+- (NSArray *)getItemSimTopNWithEngine:(NSString *)engine iid:(NSString *)iid n:(NSInteger)n;
 
 //Sends an asynchronous get similar items request to the API.
-- (NSDictionary *)getItemSimTopNWithAttributes:(PIOItemSimGetTopNRequest *)itemSimTopNRequest;
+- (NSDictionary *)getItemSimTopNWithAttributesWithRequest:(PIOItemSimGetTopNRequest *)itemSimTopNRequest;
+- (NSDictionary *)getItemSimTopNWithAttributesWithEngine:(NSString *)engine iid:(NSString *)iid n:(NSInteger)n attributes:(NSArray *)attributes;
 
 //Get status of the API.
 - (NSString *)getStatus;
@@ -83,13 +88,8 @@
 //Identify the user ID.
 - (void)identifyUserID:(NSString *)uid;
 
-//Set the API URL of this client.
-- (void)setApiUrl:(NSString *)apiUrl;
-
-//Set the app key of this client.
-- (void)setAppkey:(NSString *)appkey;
-
 //Sends an asynchronous user-action-on-item request to the API.
-- (void)userActionItem:(PIOUserActionItemRequest *)userActionItemRequest;
+- (void)userActionItemWithRequest:(PIOUserActionItemRequest *)userActionItemRequest;
+- (void)userActionItemWithUID:(NSString *)uid action:(NSString *)action iid:(NSString *)iid;
 
 @end
