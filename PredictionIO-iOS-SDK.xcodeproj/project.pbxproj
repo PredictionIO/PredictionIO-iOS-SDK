@@ -78,7 +78,7 @@
 		9A974181186CC23600BE4C94 /* PredictionIO-iOS-SDKTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "PredictionIO-iOS-SDKTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9A974182186CC23600BE4C94 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		9A974185186CC23600BE4C94 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
-		9A97418C186CC23600BE4C94 /* UnitTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "UnitTests-Info.plist"; sourceTree = "<group>"; };
+		9A97418C186CC23600BE4C94 /* PredictionIO-iOS-SDKTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "PredictionIO-iOS-SDKTests-Info.plist"; sourceTree = "<group>"; };
 		9A97418E186CC23600BE4C94 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		9A974190186CC23600BE4C94 /* PredictionIOTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PredictionIOTests.m; sourceTree = "<group>"; };
 		9ADE4BB91871606A0076326B /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AFHTTPRequestOperation.h; path = "PredictionIO-iOS-SDK/3rdParty/AFNetworking/AFHTTPRequestOperation.h"; sourceTree = "<group>"; };
@@ -124,7 +124,7 @@
 			isa = PBXGroup;
 			children = (
 				9A974176186CC23600BE4C94 /* PredictionIO-iOS-SDK */,
-				9A97418A186CC23600BE4C94 /* UnitTests */,
+				9A97418A186CC23600BE4C94 /* PredictionIO-iOS-SDKTests */,
 				9A974173186CC23600BE4C94 /* Frameworks */,
 				9A974172186CC23600BE4C94 /* Products */,
 			);
@@ -182,19 +182,19 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		9A97418A186CC23600BE4C94 /* UnitTests */ = {
+		9A97418A186CC23600BE4C94 /* PredictionIO-iOS-SDKTests */ = {
 			isa = PBXGroup;
 			children = (
 				9A974190186CC23600BE4C94 /* PredictionIOTests.m */,
 				9A97418B186CC23600BE4C94 /* Supporting Files */,
 			);
-			path = UnitTests;
+			path = "PredictionIO-iOS-SDKTests";
 			sourceTree = "<group>";
 		};
 		9A97418B186CC23600BE4C94 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				9A97418C186CC23600BE4C94 /* UnitTests-Info.plist */,
+				9A97418C186CC23600BE4C94 /* PredictionIO-iOS-SDKTests-Info.plist */,
 				9A97418D186CC23600BE4C94 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";

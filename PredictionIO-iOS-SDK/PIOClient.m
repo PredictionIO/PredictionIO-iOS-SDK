@@ -49,24 +49,24 @@ int const HTTP_NOT_FOUND = 404;
 
 //Sends an asynchronous create item request to the API.
 - (void)createItemWithRequest:(PIOCreateItemRequest *)createItemRequest
-                      success:(void (^)(void))successBlock
-                      failure:(void (^)(void))failureBlock
+                      success:(void (^)(AFHTTPRequestOperation *operation , id responseObject))successBlock
+                      failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock;
 {
     [self.requestManager POST:[NSString stringWithFormat:@"/items.%@", apiFormat] parameters:[createItemRequest getRequestParams] success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (successBlock) {
-            successBlock();
+            successBlock(operation, responseObject);
         }
         NSLog(@"JSON: %@", responseObject);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         if (failureBlock) {
-            failureBlock();
+            failureBlock(operation, error);
         }
         NSLog(@"Error: %@", error);
     }];
 }
 - (void)createItemWithIID:(NSString *)iid itypes:(NSArray *)itypes
-                  success:(void (^)(void))successBlock
-                  failure:(void (^)(void))failureBlock
+                  success:(void (^)(AFHTTPRequestOperation *operation , id responseObject))successBlock
+                  failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock;
 {
     PIOCreateItemRequest *createItemRequest = [[PIOCreateItemRequest alloc] initWithApiUrl:self.apiUrl apiFormat:apiFormat appkey:self.appkey iid:iid itypes:itypes];
     [self createItemWithRequest:createItemRequest success:successBlock failure:failureBlock];
@@ -80,22 +80,20 @@ int const HTTP_NOT_FOUND = 404;
 
 //Sends an asynchronous get item request to the API. Execute success block if request is successful; execute failure block otherwise.
 - (void)getItem:(NSString *)iid
-        success:(void (^)(void))successBlock
-        failure:(void (^)(void))failureBlock;
+        success:(void (^)(AFHTTPRequestOperation *operation , id responseObject))successBlock
+        failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock;
 {
     //Request request = (new RequestBuilder("GET")).setUrl(this.apiUrl + "/items/" + iid + "." + apiFormat).addQueryParameter("pio_appkey", this.appkey).build();
     //return new FutureAPIResponse(this.client.executeRequest(request, this.getHandler()));
     
     [self.requestManager GET:[NSString stringWithFormat:@"/items/%@.%@", iid, apiFormat] parameters:@{@"pio_appkey": self.appkey} success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (successBlock) {
-            successBlock();
+            successBlock(operation, responseObject);
         }
-        NSLog(@"JSON: %@", responseObject);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         if (failureBlock) {
-            failureBlock();
+            failureBlock(operation, error);
         }
-        NSLog(@"Error: %@", error);
     }];
 }
 

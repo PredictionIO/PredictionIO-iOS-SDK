@@ -38,11 +38,11 @@
 
 //Sends an asynchronous create item request to the API.
 - (void)createItemWithRequest:(PIOCreateItemRequest *)createItemRequest
-                      success:(void (^)(void))successBlock
-                      failure:(void (^)(void))failureBlock;
+                      success:(void (^)(AFHTTPRequestOperation *operation , id responseObject))successBlock
+                      failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock;
 - (void)createItemWithIID:(NSString *)iid itypes:(NSArray *)itypes
-                  success:(void (^)(void))successBlock
-                  failure:(void (^)(void))failureBlock;
+                  success:(void (^)(AFHTTPRequestOperation *operation , id responseObject))successBlock
+                  failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock;
 
 //Sends an asynchronous delete item request to the API.
 - (void)deleteItem:(NSString *)iid;
@@ -50,8 +50,8 @@
 //Sends an asynchronous get item request to the API. Execute success block if request is successful; execute failure block otherwise.
 //Note: sucesss/failure blocks are called on the main thread after the request returns.
 - (void)getItem:(NSString *)iid
-        success:(void (^)(void))successBlock
-        failure:(void (^)(void))failureBlock;
+        success:(void (^)(AFHTTPRequestOperation *operation , id responseObject))successBlock
+        failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock;
 
 //Sends an asynchronous create user request to the API.
 - (void)createUserWithRequest:(PIOCreateUserRequest *)createUserRequest;
