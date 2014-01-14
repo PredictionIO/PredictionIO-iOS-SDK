@@ -55,6 +55,8 @@
 
 - (void)addAttributeWithName:(NSString *)name value:(NSString *)value;
 
+- (NSDictionary *)getRequestParams;
+
 ///**
 // * Add the "latitude" optional argument to the request.
 // * <p>

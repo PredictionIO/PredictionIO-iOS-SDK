@@ -21,8 +21,8 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
-#import "PIOAFURLConnectionOperation.h"
-#import "PIOAFURLResponseSerialization.h"
+#import "AFURLConnectionOperation.h"
+#import "AFURLResponseSerialization.h"
 
 /**
  `AFHTTPRequestOperation` is a subclass of `AFURLConnectionOperation` for requests using the HTTP or HTTPS protocols. It encapsulates the concept of acceptable status codes and content types, which determine the success or failure of a request.

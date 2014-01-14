@@ -23,7 +23,7 @@
 #import <Foundation/Foundation.h>
 
 #import <Availability.h>
-#import "PIOAFSecurityPolicy.h"
+#import "AFSecurityPolicy.h"
 
 /**
  `AFURLConnectionOperation` is a subclass of `NSOperation` that implements `NSURLConnection` delegate methods.

@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "PIOAFURLResponseSerialization.h"
+#import "AFURLResponseSerialization.h"
 
 extern NSString * const AFNetworkingErrorDomain;
 extern NSString * const AFNetworkingOperationFailingURLResponseErrorKey;

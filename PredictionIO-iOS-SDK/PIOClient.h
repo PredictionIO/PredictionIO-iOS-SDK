@@ -14,32 +14,44 @@
 #import "PIOItemRecGetTopNRequest.h"
 #import "PIOItemSimGetTopNRequest.h"
 #import "PIOUserActionItemRequest.h"
+#import "AFHTTPRequestOperationManager.h"
 
 @interface PIOClient : NSObject
 
 @property (strong, nonatomic) NSString *apiUrl;
 @property (strong, nonatomic) NSString *appkey;
 @property (strong, nonatomic) NSString *uid;
+@property (strong, nonatomic) AFHTTPRequestOperationManager *requestManager;
 
 
 //Note: all requests are async by default (built on top of AFNetworking).
 //TODO: add sync requests later, and other unimplemented methods.
 
 //Instantiate a PredictionIO RESTful API client using default values for API URL.
+- (id)initWithAppKey:(NSString *)appkey;
+
+//Instantiate a PredictionIO RESTful API client.
 - (id)initWithAppKey:(NSString *)appkey apiURL:(NSString *)apiURL;
 
 //Close all connections associated with this client.
 - (void)close;
 
 //Sends an asynchronous create item request to the API.
-- (void)createItemWithRequest:(PIOCreateItemRequest *)createItemRequest;
-- (void)createItemWithIID:(NSString *)iid itypes:(NSArray *)itypes;
+- (void)createItemWithRequest:(PIOCreateItemRequest *)createItemRequest
+                      success:(void (^)(void))successBlock
+                      failure:(void (^)(void))failureBlock;
+- (void)createItemWithIID:(NSString *)iid itypes:(NSArray *)itypes
+                  success:(void (^)(void))successBlock
+                  failure:(void (^)(void))failureBlock;
 
 //Sends an asynchronous delete item request to the API.
 - (void)deleteItem:(NSString *)iid;
 
-//Sends an asynchronous get item request to the API.
-- (PIOItem *)getItem:(NSString *)iid;
+//Sends an asynchronous get item request to the API. Execute success block if request is successful; execute failure block otherwise.
+//Note: sucesss/failure blocks are called on the main thread after the request returns.
+- (void)getItem:(NSString *)iid
+        success:(void (^)(void))successBlock
+        failure:(void (^)(void))failureBlock;
 
 //Sends an asynchronous create user request to the API.
 - (void)createUserWithRequest:(PIOCreateUserRequest *)createUserRequest;

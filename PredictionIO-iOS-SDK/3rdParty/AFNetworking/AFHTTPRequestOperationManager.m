@@ -22,8 +22,8 @@
 
 #import <Foundation/Foundation.h>
 
-#import "PIOAFHTTPRequestOperationManager.h"
-#import "PIOAFHTTPRequestOperation.h"
+#import "AFHTTPRequestOperationManager.h"
+#import "AFHTTPRequestOperation.h"
 
 #import <Availability.h>
 #import <Security/Security.h>

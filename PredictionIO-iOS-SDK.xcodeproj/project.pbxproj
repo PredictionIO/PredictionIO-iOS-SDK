@@ -23,13 +23,13 @@
 		9A974189186CC23600BE4C94 /* libPredictionIO-iOS-SDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A974171186CC23600BE4C94 /* libPredictionIO-iOS-SDK.a */; };
 		9A97418F186CC23600BE4C94 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9A97418D186CC23600BE4C94 /* InfoPlist.strings */; };
 		9A974191186CC23600BE4C94 /* PredictionIOTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A974190186CC23600BE4C94 /* PredictionIOTests.m */; };
-		9ADE4BBF1871606A0076326B /* PIOAFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ADE4BBA1871606A0076326B /* PIOAFHTTPRequestOperation.m */; };
-		9ADE4BC01871606A0076326B /* PIOAFHTTPRequestOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ADE4BBC1871606A0076326B /* PIOAFHTTPRequestOperationManager.m */; };
-		9ADE4BC11871606A0076326B /* PIOAFURLConnectionOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ADE4BBE1871606A0076326B /* PIOAFURLConnectionOperation.m */; };
-		9ADE4BCA187161490076326B /* PIOAFNetworkReachabilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ADE4BC3187161490076326B /* PIOAFNetworkReachabilityManager.m */; };
-		9ADE4BCB187161490076326B /* PIOAFSecurityPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ADE4BC5187161490076326B /* PIOAFSecurityPolicy.m */; };
-		9ADE4BCC187161490076326B /* PIOAFURLRequestSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ADE4BC7187161490076326B /* PIOAFURLRequestSerialization.m */; };
-		9ADE4BCD187161490076326B /* PIOAFURLResponseSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ADE4BC9187161490076326B /* PIOAFURLResponseSerialization.m */; };
+		9ADE4BBF1871606A0076326B /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ADE4BBA1871606A0076326B /* AFHTTPRequestOperation.m */; };
+		9ADE4BC01871606A0076326B /* AFHTTPRequestOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ADE4BBC1871606A0076326B /* AFHTTPRequestOperationManager.m */; };
+		9ADE4BC11871606A0076326B /* AFURLConnectionOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ADE4BBE1871606A0076326B /* AFURLConnectionOperation.m */; };
+		9ADE4BCA187161490076326B /* AFNetworkReachabilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ADE4BC3187161490076326B /* AFNetworkReachabilityManager.m */; };
+		9ADE4BCB187161490076326B /* AFSecurityPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ADE4BC5187161490076326B /* AFSecurityPolicy.m */; };
+		9ADE4BCC187161490076326B /* AFURLRequestSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ADE4BC7187161490076326B /* AFURLRequestSerialization.m */; };
+		9ADE4BCD187161490076326B /* AFURLResponseSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ADE4BC9187161490076326B /* AFURLResponseSerialization.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -81,20 +81,20 @@
 		9A97418C186CC23600BE4C94 /* UnitTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "UnitTests-Info.plist"; sourceTree = "<group>"; };
 		9A97418E186CC23600BE4C94 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		9A974190186CC23600BE4C94 /* PredictionIOTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PredictionIOTests.m; sourceTree = "<group>"; };
-		9ADE4BB91871606A0076326B /* PIOAFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PIOAFHTTPRequestOperation.h; path = "PredictionIO-iOS-SDK/3rdParty/AFNetworking/PIOAFHTTPRequestOperation.h"; sourceTree = "<group>"; };
-		9ADE4BBA1871606A0076326B /* PIOAFHTTPRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PIOAFHTTPRequestOperation.m; path = "PredictionIO-iOS-SDK/3rdParty/AFNetworking/PIOAFHTTPRequestOperation.m"; sourceTree = "<group>"; };
-		9ADE4BBB1871606A0076326B /* PIOAFHTTPRequestOperationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PIOAFHTTPRequestOperationManager.h; path = "PredictionIO-iOS-SDK/3rdParty/AFNetworking/PIOAFHTTPRequestOperationManager.h"; sourceTree = "<group>"; };
-		9ADE4BBC1871606A0076326B /* PIOAFHTTPRequestOperationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PIOAFHTTPRequestOperationManager.m; path = "PredictionIO-iOS-SDK/3rdParty/AFNetworking/PIOAFHTTPRequestOperationManager.m"; sourceTree = "<group>"; };
-		9ADE4BBD1871606A0076326B /* PIOAFURLConnectionOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PIOAFURLConnectionOperation.h; path = "PredictionIO-iOS-SDK/3rdParty/AFNetworking/PIOAFURLConnectionOperation.h"; sourceTree = "<group>"; };
-		9ADE4BBE1871606A0076326B /* PIOAFURLConnectionOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PIOAFURLConnectionOperation.m; path = "PredictionIO-iOS-SDK/3rdParty/AFNetworking/PIOAFURLConnectionOperation.m"; sourceTree = "<group>"; };
-		9ADE4BC2187161490076326B /* PIOAFNetworkReachabilityManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PIOAFNetworkReachabilityManager.h; path = "PredictionIO-iOS-SDK/3rdParty/AFNetworking/PIOAFNetworkReachabilityManager.h"; sourceTree = "<group>"; };
-		9ADE4BC3187161490076326B /* PIOAFNetworkReachabilityManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PIOAFNetworkReachabilityManager.m; path = "PredictionIO-iOS-SDK/3rdParty/AFNetworking/PIOAFNetworkReachabilityManager.m"; sourceTree = "<group>"; };
-		9ADE4BC4187161490076326B /* PIOAFSecurityPolicy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PIOAFSecurityPolicy.h; path = "PredictionIO-iOS-SDK/3rdParty/AFNetworking/PIOAFSecurityPolicy.h"; sourceTree = "<group>"; };
-		9ADE4BC5187161490076326B /* PIOAFSecurityPolicy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PIOAFSecurityPolicy.m; path = "PredictionIO-iOS-SDK/3rdParty/AFNetworking/PIOAFSecurityPolicy.m"; sourceTree = "<group>"; };
-		9ADE4BC6187161490076326B /* PIOAFURLRequestSerialization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PIOAFURLRequestSerialization.h; path = "PredictionIO-iOS-SDK/3rdParty/AFNetworking/PIOAFURLRequestSerialization.h"; sourceTree = "<group>"; };
-		9ADE4BC7187161490076326B /* PIOAFURLRequestSerialization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PIOAFURLRequestSerialization.m; path = "PredictionIO-iOS-SDK/3rdParty/AFNetworking/PIOAFURLRequestSerialization.m"; sourceTree = "<group>"; };
-		9ADE4BC8187161490076326B /* PIOAFURLResponseSerialization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PIOAFURLResponseSerialization.h; path = "PredictionIO-iOS-SDK/3rdParty/AFNetworking/PIOAFURLResponseSerialization.h"; sourceTree = "<group>"; };
-		9ADE4BC9187161490076326B /* PIOAFURLResponseSerialization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PIOAFURLResponseSerialization.m; path = "PredictionIO-iOS-SDK/3rdParty/AFNetworking/PIOAFURLResponseSerialization.m"; sourceTree = "<group>"; };
+		9ADE4BB91871606A0076326B /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AFHTTPRequestOperation.h; path = "PredictionIO-iOS-SDK/3rdParty/AFNetworking/AFHTTPRequestOperation.h"; sourceTree = "<group>"; };
+		9ADE4BBA1871606A0076326B /* AFHTTPRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AFHTTPRequestOperation.m; path = "PredictionIO-iOS-SDK/3rdParty/AFNetworking/AFHTTPRequestOperation.m"; sourceTree = "<group>"; };
+		9ADE4BBB1871606A0076326B /* AFHTTPRequestOperationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AFHTTPRequestOperationManager.h; path = "PredictionIO-iOS-SDK/3rdParty/AFNetworking/AFHTTPRequestOperationManager.h"; sourceTree = "<group>"; };
+		9ADE4BBC1871606A0076326B /* AFHTTPRequestOperationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AFHTTPRequestOperationManager.m; path = "PredictionIO-iOS-SDK/3rdParty/AFNetworking/AFHTTPRequestOperationManager.m"; sourceTree = "<group>"; };
+		9ADE4BBD1871606A0076326B /* AFURLConnectionOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AFURLConnectionOperation.h; path = "PredictionIO-iOS-SDK/3rdParty/AFNetworking/AFURLConnectionOperation.h"; sourceTree = "<group>"; };
+		9ADE4BBE1871606A0076326B /* AFURLConnectionOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AFURLConnectionOperation.m; path = "PredictionIO-iOS-SDK/3rdParty/AFNetworking/AFURLConnectionOperation.m"; sourceTree = "<group>"; };
+		9ADE4BC2187161490076326B /* AFNetworkReachabilityManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AFNetworkReachabilityManager.h; path = "PredictionIO-iOS-SDK/3rdParty/AFNetworking/AFNetworkReachabilityManager.h"; sourceTree = "<group>"; };
+		9ADE4BC3187161490076326B /* AFNetworkReachabilityManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AFNetworkReachabilityManager.m; path = "PredictionIO-iOS-SDK/3rdParty/AFNetworking/AFNetworkReachabilityManager.m"; sourceTree = "<group>"; };
+		9ADE4BC4187161490076326B /* AFSecurityPolicy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AFSecurityPolicy.h; path = "PredictionIO-iOS-SDK/3rdParty/AFNetworking/AFSecurityPolicy.h"; sourceTree = "<group>"; };
+		9ADE4BC5187161490076326B /* AFSecurityPolicy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AFSecurityPolicy.m; path = "PredictionIO-iOS-SDK/3rdParty/AFNetworking/AFSecurityPolicy.m"; sourceTree = "<group>"; };
+		9ADE4BC6187161490076326B /* AFURLRequestSerialization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AFURLRequestSerialization.h; path = "PredictionIO-iOS-SDK/3rdParty/AFNetworking/AFURLRequestSerialization.h"; sourceTree = "<group>"; };
+		9ADE4BC7187161490076326B /* AFURLRequestSerialization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AFURLRequestSerialization.m; path = "PredictionIO-iOS-SDK/3rdParty/AFNetworking/AFURLRequestSerialization.m"; sourceTree = "<group>"; };
+		9ADE4BC8187161490076326B /* AFURLResponseSerialization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AFURLResponseSerialization.h; path = "PredictionIO-iOS-SDK/3rdParty/AFNetworking/AFURLResponseSerialization.h"; sourceTree = "<group>"; };
+		9ADE4BC9187161490076326B /* AFURLResponseSerialization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AFURLResponseSerialization.m; path = "PredictionIO-iOS-SDK/3rdParty/AFNetworking/AFURLResponseSerialization.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -212,20 +212,20 @@
 		9ADE4BB8187160440076326B /* AFNetworking */ = {
 			isa = PBXGroup;
 			children = (
-				9ADE4BC2187161490076326B /* PIOAFNetworkReachabilityManager.h */,
-				9ADE4BC3187161490076326B /* PIOAFNetworkReachabilityManager.m */,
-				9ADE4BC4187161490076326B /* PIOAFSecurityPolicy.h */,
-				9ADE4BC5187161490076326B /* PIOAFSecurityPolicy.m */,
-				9ADE4BC6187161490076326B /* PIOAFURLRequestSerialization.h */,
-				9ADE4BC7187161490076326B /* PIOAFURLRequestSerialization.m */,
-				9ADE4BC8187161490076326B /* PIOAFURLResponseSerialization.h */,
-				9ADE4BC9187161490076326B /* PIOAFURLResponseSerialization.m */,
-				9ADE4BB91871606A0076326B /* PIOAFHTTPRequestOperation.h */,
-				9ADE4BBA1871606A0076326B /* PIOAFHTTPRequestOperation.m */,
-				9ADE4BBB1871606A0076326B /* PIOAFHTTPRequestOperationManager.h */,
-				9ADE4BBC1871606A0076326B /* PIOAFHTTPRequestOperationManager.m */,
-				9ADE4BBD1871606A0076326B /* PIOAFURLConnectionOperation.h */,
-				9ADE4BBE1871606A0076326B /* PIOAFURLConnectionOperation.m */,
+				9ADE4BC2187161490076326B /* AFNetworkReachabilityManager.h */,
+				9ADE4BC3187161490076326B /* AFNetworkReachabilityManager.m */,
+				9ADE4BC4187161490076326B /* AFSecurityPolicy.h */,
+				9ADE4BC5187161490076326B /* AFSecurityPolicy.m */,
+				9ADE4BC6187161490076326B /* AFURLRequestSerialization.h */,
+				9ADE4BC7187161490076326B /* AFURLRequestSerialization.m */,
+				9ADE4BC8187161490076326B /* AFURLResponseSerialization.h */,
+				9ADE4BC9187161490076326B /* AFURLResponseSerialization.m */,
+				9ADE4BB91871606A0076326B /* AFHTTPRequestOperation.h */,
+				9ADE4BBA1871606A0076326B /* AFHTTPRequestOperation.m */,
+				9ADE4BBB1871606A0076326B /* AFHTTPRequestOperationManager.h */,
+				9ADE4BBC1871606A0076326B /* AFHTTPRequestOperationManager.m */,
+				9ADE4BBD1871606A0076326B /* AFURLConnectionOperation.h */,
+				9ADE4BBE1871606A0076326B /* AFURLConnectionOperation.m */,
 			);
 			name = AFNetworking;
 			sourceTree = "<group>";
@@ -312,18 +312,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				9A8BC829186CE12D00E09A7A /* PIOCreateUserRequest.m in Sources */,
-				9ADE4BCB187161490076326B /* PIOAFSecurityPolicy.m in Sources */,
-				9ADE4BC01871606A0076326B /* PIOAFHTTPRequestOperationManager.m in Sources */,
-				9ADE4BCD187161490076326B /* PIOAFURLResponseSerialization.m in Sources */,
+				9ADE4BCB187161490076326B /* AFSecurityPolicy.m in Sources */,
+				9ADE4BC01871606A0076326B /* AFHTTPRequestOperationManager.m in Sources */,
+				9ADE4BCD187161490076326B /* AFURLResponseSerialization.m in Sources */,
 				9A8BC82F186CE44600E09A7A /* PIOItemRecGetTopNRequest.m in Sources */,
 				9A8BC838186CEDF000E09A7A /* PIOUserActionItemRequest.m in Sources */,
 				9A97417C186CC23600BE4C94 /* PIOClient.m in Sources */,
 				9A8BC826186CDF6C00E09A7A /* PIOCreateItemRequest.m in Sources */,
 				9A8BC82C186CE34000E09A7A /* PIOItem.m in Sources */,
-				9ADE4BCC187161490076326B /* PIOAFURLRequestSerialization.m in Sources */,
-				9ADE4BCA187161490076326B /* PIOAFNetworkReachabilityManager.m in Sources */,
-				9ADE4BC11871606A0076326B /* PIOAFURLConnectionOperation.m in Sources */,
-				9ADE4BBF1871606A0076326B /* PIOAFHTTPRequestOperation.m in Sources */,
+				9ADE4BCC187161490076326B /* AFURLRequestSerialization.m in Sources */,
+				9ADE4BCA187161490076326B /* AFNetworkReachabilityManager.m in Sources */,
+				9ADE4BC11871606A0076326B /* AFURLConnectionOperation.m in Sources */,
+				9ADE4BBF1871606A0076326B /* AFHTTPRequestOperation.m in Sources */,
 				9A8BC832186CE77800E09A7A /* PIOItemSimGetTopNRequest.m in Sources */,
 				9A8BC835186CEC5000E09A7A /* PIOUser.m in Sources */,
 			);

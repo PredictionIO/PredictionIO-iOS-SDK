@@ -22,6 +22,10 @@ int const HTTP_BAD_REQUEST = 400;
 int const HTTP_FORBIDDEN = 403;
 int const HTTP_NOT_FOUND = 404;
 
+- (id)initWithAppKey:(NSString *)appkey
+{
+    return [self initWithAppKey:appkey apiURL:defaultApiUrl];
+}
 
 //Instantiate a PredictionIO RESTful API client.
 - (id)initWithAppKey:(NSString *)appkey apiURL:(NSString *)apiURL
@@ -30,6 +34,8 @@ int const HTTP_NOT_FOUND = 404;
     if (self) {
         [self setAppkey:appkey];
         [self setApiUrl:apiURL];
+        self.requestManager = [AFHTTPRequestOperationManager manager];
+        self.requestManager = [self.requestManager initWithBaseURL:[NSURL URLWithString:[apiURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
     }
     return self;
 }
@@ -43,12 +49,27 @@ int const HTTP_NOT_FOUND = 404;
 
 //Sends an asynchronous create item request to the API.
 - (void)createItemWithRequest:(PIOCreateItemRequest *)createItemRequest
+                      success:(void (^)(void))successBlock
+                      failure:(void (^)(void))failureBlock
 {
-    return;
+    [self.requestManager POST:[NSString stringWithFormat:@"/items.%@", apiFormat] parameters:[createItemRequest getRequestParams] success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if (successBlock) {
+            successBlock();
+        }
+        NSLog(@"JSON: %@", responseObject);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        if (failureBlock) {
+            failureBlock();
+        }
+        NSLog(@"Error: %@", error);
+    }];
 }
 - (void)createItemWithIID:(NSString *)iid itypes:(NSArray *)itypes
+                  success:(void (^)(void))successBlock
+                  failure:(void (^)(void))failureBlock
 {
-    return;
+    PIOCreateItemRequest *createItemRequest = [[PIOCreateItemRequest alloc] initWithApiUrl:self.apiUrl apiFormat:apiFormat appkey:self.appkey iid:iid itypes:itypes];
+    [self createItemWithRequest:createItemRequest success:successBlock failure:failureBlock];
 }
 
 //Sends an asynchronous delete item request to the API.
@@ -57,10 +78,25 @@ int const HTTP_NOT_FOUND = 404;
     return;
 }
 
-//Sends an asynchronous get item request to the API.
-- (PIOItem *)getItem:(NSString *)iid
+//Sends an asynchronous get item request to the API. Execute success block if request is successful; execute failure block otherwise.
+- (void)getItem:(NSString *)iid
+        success:(void (^)(void))successBlock
+        failure:(void (^)(void))failureBlock;
 {
-    return nil;
+    //Request request = (new RequestBuilder("GET")).setUrl(this.apiUrl + "/items/" + iid + "." + apiFormat).addQueryParameter("pio_appkey", this.appkey).build();
+    //return new FutureAPIResponse(this.client.executeRequest(request, this.getHandler()));
+    
+    [self.requestManager GET:[NSString stringWithFormat:@"/items/%@.%@", iid, apiFormat] parameters:@{@"pio_appkey": self.appkey} success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if (successBlock) {
+            successBlock();
+        }
+        NSLog(@"JSON: %@", responseObject);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        if (failureBlock) {
+            failureBlock();
+        }
+        NSLog(@"Error: %@", error);
+    }];
 }
 
 //Sends an asynchronous create user request to the API.
