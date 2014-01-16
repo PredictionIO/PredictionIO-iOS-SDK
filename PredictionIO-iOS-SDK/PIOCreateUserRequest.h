@@ -32,6 +32,9 @@
  */
 - (id)initWithApiUrl:(NSString *)apiUrl apiFormat:(NSString *)apiFormat appkey:(NSString *)appkey uid:(NSString *)uid;
 
+- (NSDictionary *)getRequestParams;
+
+
 ///**
 // * Add the "latitude" optional argument to the request.
 // * <p>

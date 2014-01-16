@@ -45,7 +45,9 @@
                   failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock;
 
 //Sends an asynchronous delete item request to the API.
-- (void)deleteItem:(NSString *)iid;
+- (void)deleteItem:(NSString *)iid
+           success:(void (^)(AFHTTPRequestOperation *operation , id responseObject))successBlock
+           failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock;
 
 //Sends an asynchronous get item request to the API. Execute success block if request is successful; execute failure block otherwise.
 //Note: sucesss/failure blocks are called on the main thread after the request returns.
@@ -54,11 +56,18 @@
         failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock;
 
 //Sends an asynchronous create user request to the API.
-- (void)createUserWithRequest:(PIOCreateUserRequest *)createUserRequest;
-- (void)createUserWithUID:(NSString *)uid;
+- (void)createUserWithRequest:(PIOCreateUserRequest *)createUserRequest
+                      success:(void (^)(AFHTTPRequestOperation *operation , id responseObject))successBlock
+                      failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock;
+- (void)createUserWithUID:(NSString *)uid
+                  success:(void (^)(AFHTTPRequestOperation *operation , id responseObject))successBlock
+                  failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock;
+
 
 //Sends an asynchronous delete user request to the API.
-- (void)deleteUser:(NSString *)uid;
+- (void)deleteUser:(NSString *)uid
+           success:(void (^)(AFHTTPRequestOperation *operation , id responseObject))successBlock
+           failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock;
 
 //Get a new CreateItemRequest object that can be used to add additional item attributes.
 - (PIOCreateItemRequest *)newCreateItemRequestWithItemID:(NSString *)iid itypes:(NSArray *)itypes;
@@ -70,29 +79,42 @@
 - (PIOItemRecGetTopNRequest *)newItemRecGetTopNRequestWithEngine:(NSString *)engine uid:(NSString *)uid n:(NSInteger)n attributes:(NSArray *)attributes;
 
 //Sends an asynchronous get recommendations request to the API.
-- (NSArray *)getItemRecTopNWithRequest:(PIOItemRecGetTopNRequest *)itemTopNRequest;
-- (NSArray *)getItemRecTopNWithEngine:(NSString *)engine uid:(NSString *)uid n:(NSInteger)n;
+- (void)getItemRecTopNWithRequest:(PIOItemRecGetTopNRequest *)itemTopNRequest
+                               success:(void (^)(AFHTTPRequestOperation *operation , id responseObject))successBlock
+                               failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock;
+- (void)getItemRecTopNWithEngine:(NSString *)engine uid:(NSString *)uid n:(NSInteger)n
+                         success:(void (^)(AFHTTPRequestOperation *operation , id responseObject))successBlock
+                         failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock;
+
 
 //Sends an asynchronous get recommendations request to the API.
-- (NSDictionary *)getItemRecTopNWithAttributesWithRequest:(PIOItemRecGetTopNRequest *)itemTopNRequest;
-- (NSDictionary *)getItemRecTopNWithAttributesWithEngine:(NSString *)engine uid:(NSString *)uid n:(NSInteger)n attributes:(NSArray *)attributes;
+- (void)getItemRecTopNWithAttributesWithEngine:(NSString *)engine uid:(NSString *)uid n:(NSInteger)n attributes:(NSArray *)attributes
+                                       success:(void (^)(AFHTTPRequestOperation *operation , id responseObject))successBlock
+                                       failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock;
 
 //Get a new get top-n similar items request object that can be used to add additional request parameters.
 - (PIOItemSimGetTopNRequest *)newItemSimGetTopNRequestWithEngine:(NSString *)engine iid:(NSString *)iid n:(NSInteger)n attributes:(NSArray *)attributes;
 
 //Sends an asynchronous get similar items request to the API.
-- (NSArray *)getItemSimTopNWithRequest:(PIOItemSimGetTopNRequest *)itemSimTopNRequest;
-- (NSArray *)getItemSimTopNWithEngine:(NSString *)engine iid:(NSString *)iid n:(NSInteger)n;
+- (void)getItemSimTopNWithRequest:(PIOItemSimGetTopNRequest *)itemSimTopNRequest
+                          success:(void (^)(AFHTTPRequestOperation *operation , id responseObject))successBlock
+                          failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock;
+- (void)getItemSimTopNWithEngine:(NSString *)engine iid:(NSString *)iid n:(NSInteger)n
+                              success:(void (^)(AFHTTPRequestOperation *operation , id responseObject))successBlock
+                              failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock;
 
 //Sends an asynchronous get similar items request to the API.
-- (NSDictionary *)getItemSimTopNWithAttributesWithRequest:(PIOItemSimGetTopNRequest *)itemSimTopNRequest;
-- (NSDictionary *)getItemSimTopNWithAttributesWithEngine:(NSString *)engine iid:(NSString *)iid n:(NSInteger)n attributes:(NSArray *)attributes;
+- (void)getItemSimTopNWithAttributesWithEngine:(NSString *)engine iid:(NSString *)iid n:(NSInteger)n attributes:(NSArray *)attributes
+                                       success:(void (^)(AFHTTPRequestOperation *operation , id responseObject))successBlock
+                                       failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock;
 
 //Get status of the API.
 - (NSString *)getStatus;
 
 //Sends an asynchronous get user request to the API.
-- (PIOUser *)getUser:(NSString *)uid;
+- (void)getUser:(NSString *)uid
+             success:(void (^)(AFHTTPRequestOperation *operation , id responseObject))successBlock
+             failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock;
 
 //Get a new user-action-on-item request object that can be used to add additional request parameters.
 - (PIOUserActionItemRequest *)newUserActionItemRequestWithUID:(NSString *)uid action:(NSString *)action iid:(NSString *)iid;
@@ -101,7 +123,11 @@
 - (void)identifyUserID:(NSString *)uid;
 
 //Sends an asynchronous user-action-on-item request to the API.
-- (void)userActionItemWithRequest:(PIOUserActionItemRequest *)userActionItemRequest;
-- (void)userActionItemWithUID:(NSString *)uid action:(NSString *)action iid:(NSString *)iid;
+- (void)userActionItemWithRequest:(PIOUserActionItemRequest *)userActionItemRequest
+                          success:(void (^)(AFHTTPRequestOperation *operation , id responseObject))successBlock
+                          failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock;
+- (void)userActionItemWithUID:(NSString *)uid action:(NSString *)action iid:(NSString *)iid
+                      success:(void (^)(AFHTTPRequestOperation *operation , id responseObject))successBlock
+                      failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock;
 
 @end

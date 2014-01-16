@@ -37,8 +37,9 @@
     NSMutableDictionary *requestParams = [[NSMutableDictionary alloc] init];
     [requestParams setObject:self.appkey forKey:@"pio_appkey"];
     [requestParams setObject:self.iid forKey:@"pio_iid"];
-    [requestParams setObject:[self.itypes componentsJoinedByString:@","] forKey:@"pio_itypes"];
-    
+    if (self.itypes && [self.itypes count] > 0) {
+        [requestParams setObject:[self.itypes componentsJoinedByString:@","] forKey:@"pio_itypes"];
+    }
     if (self.latitude && self.longitude) {  //TODO: NSNumber to string need format checking
         [requestParams setObject:[NSString stringWithFormat:@"%@,%@", self.latitude, self.longitude] forKey:@"pio_latlng"];
     }
@@ -48,9 +49,11 @@
     if (self.endT) {    //TODO: NSDate to string need format checking
         [requestParams setObject:[NSString stringWithFormat:@"%@", self.endT] forKey:@"pio_endT"];
     }
-    for (NSString *key in [self.attributes allKeys]) {
-        if ([self.attributes objectForKey:key]) {
-            [requestParams setObject:[self.attributes objectForKey:key] forKey:key];
+    if (self.attributes && [self.attributes count] > 0) {
+        for (NSString *key in [self.attributes allKeys]) {
+            if ([self.attributes objectForKey:key]) {
+                [requestParams setObject:[self.attributes objectForKey:key] forKey:key];
+            }
         }
     }
     return requestParams;

@@ -43,8 +43,7 @@ int const HTTP_NOT_FOUND = 404;
 //Close all connections associated with this client.
 - (void)close
 {
-    //TODO
-    return;
+    [self.requestManager.operationQueue cancelAllOperations];
 }
 
 //Sends an asynchronous create item request to the API.
@@ -56,17 +55,15 @@ int const HTTP_NOT_FOUND = 404;
         if (successBlock) {
             successBlock(operation, responseObject);
         }
-        NSLog(@"JSON: %@", responseObject);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         if (failureBlock) {
             failureBlock(operation, error);
         }
-        NSLog(@"Error: %@", error);
     }];
 }
 - (void)createItemWithIID:(NSString *)iid itypes:(NSArray *)itypes
                   success:(void (^)(AFHTTPRequestOperation *operation , id responseObject))successBlock
-                  failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock;
+                  failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock
 {
     PIOCreateItemRequest *createItemRequest = [[PIOCreateItemRequest alloc] initWithApiUrl:self.apiUrl apiFormat:apiFormat appkey:self.appkey iid:iid itypes:itypes];
     [self createItemWithRequest:createItemRequest success:successBlock failure:failureBlock];
@@ -74,8 +71,18 @@ int const HTTP_NOT_FOUND = 404;
 
 //Sends an asynchronous delete item request to the API.
 - (void)deleteItem:(NSString *)iid
+           success:(void (^)(AFHTTPRequestOperation *operation , id responseObject))successBlock
+           failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock
 {
-    return;
+    [self.requestManager DELETE:[NSString stringWithFormat:@"/items/%@.%@", iid, apiFormat] parameters:@{@"pio_appkey": self.appkey} success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if (successBlock) {
+            successBlock(operation, responseObject);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        if (failureBlock) {
+            failureBlock(operation, error);
+        }
+    }];
 }
 
 //Sends an asynchronous get item request to the API. Execute success block if request is successful; execute failure block otherwise.
@@ -83,9 +90,6 @@ int const HTTP_NOT_FOUND = 404;
         success:(void (^)(AFHTTPRequestOperation *operation , id responseObject))successBlock
         failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock;
 {
-    //Request request = (new RequestBuilder("GET")).setUrl(this.apiUrl + "/items/" + iid + "." + apiFormat).addQueryParameter("pio_appkey", this.appkey).build();
-    //return new FutureAPIResponse(this.client.executeRequest(request, this.getHandler()));
-    
     [self.requestManager GET:[NSString stringWithFormat:@"/items/%@.%@", iid, apiFormat] parameters:@{@"pio_appkey": self.appkey} success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (successBlock) {
             successBlock(operation, responseObject);
@@ -99,102 +103,181 @@ int const HTTP_NOT_FOUND = 404;
 
 //Sends an asynchronous create user request to the API.
 - (void)createUserWithRequest:(PIOCreateUserRequest *)createUserRequest
+                      success:(void (^)(AFHTTPRequestOperation *operation , id responseObject))successBlock
+                      failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock
 {
-    return;
+    [self.requestManager POST:[NSString stringWithFormat:@"/users.%@", apiFormat] parameters:[createUserRequest getRequestParams] success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if (successBlock) {
+            successBlock(operation, responseObject);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        if (failureBlock) {
+            failureBlock(operation, error);
+        }
+    }];
 }
+
 - (void)createUserWithUID:(NSString *)uid
+                  success:(void (^)(AFHTTPRequestOperation *operation , id responseObject))successBlock
+                  failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock
 {
-    return;
+    PIOCreateUserRequest *createUserRequest = [[PIOCreateUserRequest alloc] initWithApiUrl:self.apiUrl apiFormat:apiFormat appkey:self.appkey uid:uid];
+    [self createUserWithRequest:createUserRequest success:successBlock failure:failureBlock];
 }
 
 
 //Sends an asynchronous delete user request to the API.
 - (void)deleteUser:(NSString *)uid
+           success:(void (^)(AFHTTPRequestOperation *operation , id responseObject))successBlock
+           failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock
 {
-    return;
+    /*
+     RequestBuilder builder = new RequestBuilder("DELETE");
+     builder.setUrl(this.apiUrl + "/users/" + uid + "." + apiFormat);
+     builder.addQueryParameter("pio_appkey", this.appkey);
+    */
+    [self.requestManager DELETE:[NSString stringWithFormat:@"/users/%@.%@", uid, apiFormat] parameters:@{@"pio_appkey": self.appkey} success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if (successBlock) {
+            successBlock(operation, responseObject);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        if (failureBlock) {
+            failureBlock(operation, error);
+        }
+    }];
 }
 
 //Get a new CreateItemRequest object that can be used to add additional item attributes.
 - (PIOCreateItemRequest *)newCreateItemRequestWithItemID:(NSString *)iid itypes:(NSArray *)itypes
 {
-    return nil;
+    return [[PIOCreateItemRequest alloc] initWithApiUrl:self.apiUrl apiFormat:apiFormat appkey:self.appkey iid:iid itypes:itypes];
 }
 
 //Get a create user request builder that can be used to add additional user attributes.
 - (PIOCreateUserRequest *)newCreateUserRequestWithUserID:(NSString *)uid
 {
-    return nil;
+    return [[PIOCreateUserRequest alloc] initWithApiUrl:self.apiUrl apiFormat:apiFormat appkey:self.appkey uid:uid];
 }
 
 //Get a new get top-n recommendations request object that can be used to add additional request parameters.
 - (PIOItemRecGetTopNRequest *)newItemRecGetTopNRequestWithEngine:(NSString *)engine uid:(NSString *)uid n:(NSInteger)n attributes:(NSArray *)attributes
 {
-    return nil;
+    PIOItemRecGetTopNRequest *itemTopNRequest = [[PIOItemRecGetTopNRequest alloc] initWithApiUrl:self.apiUrl apiFormat:apiFormat appkey:self.appkey engine:engine uid:uid n:n];
+    [itemTopNRequest setAttributes:attributes];
+    return itemTopNRequest;
 }
 
 //Sends an asynchronous get recommendations request to the API.
-- (NSArray *)getItemRecTopNWithRequest:(PIOItemRecGetTopNRequest *)itemTopNRequest
+- (void)getItemRecTopNWithRequest:(PIOItemRecGetTopNRequest *)itemTopNRequest
+                               success:(void (^)(AFHTTPRequestOperation *operation , id responseObject))successBlock
+                               failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock
+
 {
-    return nil;
+    /*
+     RequestBuilder builder = new RequestBuilder("GET");
+     builder.setUrl(this.apiUrl + "/engines/itemrec/" + this.engine + "/topn." + this.apiFormat);
+     */
+    [self.requestManager GET:[NSString stringWithFormat:@"/engines/itemrec/%@/topn.%@", itemTopNRequest.engine, apiFormat] parameters:[itemTopNRequest getRequestParams] success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if (successBlock) {
+            successBlock(operation, responseObject);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        if (failureBlock) {
+            failureBlock(operation, error);
+        }
+    }];
 }
-- (NSArray *)getItemRecTopNWithEngine:(NSString *)engine uid:(NSString *)uid n:(NSInteger)n
+- (void)getItemRecTopNWithEngine:(NSString *)engine uid:(NSString *)uid n:(NSInteger)n
+                              success:(void (^)(AFHTTPRequestOperation *operation , id responseObject))successBlock
+                              failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock
 {
-    return nil;
+    PIOItemRecGetTopNRequest *itemTopNRequest = [self newItemRecGetTopNRequestWithEngine:engine uid:uid n:n attributes:nil];
+    [self getItemRecTopNWithRequest:itemTopNRequest success:successBlock failure:failureBlock];
 }
 
 //Sends an asynchronous get recommendations request to the API.
-- (NSDictionary *)getItemRecTopNWithAttributesWithRequest:(PIOItemRecGetTopNRequest *)itemTopNRequest
+- (void)getItemRecTopNWithAttributesWithEngine:(NSString *)engine uid:(NSString *)uid n:(NSInteger)n attributes:(NSArray *)attributes
+                                       success:(void (^)(AFHTTPRequestOperation *operation , id responseObject))successBlock
+                                       failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock
 {
-    return nil;
-}
-- (NSDictionary *)getItemRecTopNWithAttributesWithEngine:(NSString *)engine uid:(NSString *)uid n:(NSInteger)n attributes:(NSArray *)attributes
-{
-    return nil;
+    PIOItemRecGetTopNRequest *itemTopNRequest = [self newItemRecGetTopNRequestWithEngine:engine uid:uid n:n attributes:attributes];
+    [self getItemRecTopNWithRequest:itemTopNRequest success:successBlock failure:failureBlock];
 }
 
 //Get a new get top-n similar items request object that can be used to add additional request parameters.
 - (PIOItemSimGetTopNRequest *)newItemSimGetTopNRequestWithEngine:(NSString *)engine iid:(NSString *)iid n:(NSInteger)n attributes:(NSArray *)attributes
 {
-    return nil;
+    PIOItemSimGetTopNRequest *itemSimTopNRequest = [[PIOItemSimGetTopNRequest alloc] initWithApiUrl:self.apiUrl apiFormat:apiFormat appkey:self.appkey engine:engine iid:iid n:n];
+    [itemSimTopNRequest setAttributes:attributes];
+    return itemSimTopNRequest;
 }
 
 //Sends an asynchronous get similar items request to the API.
-- (NSArray *)getItemSimTopNWithRequest:(PIOItemSimGetTopNRequest *)itemSimTopNRequest
+- (void)getItemSimTopNWithRequest:(PIOItemSimGetTopNRequest *)itemSimTopNRequest
+                          success:(void (^)(AFHTTPRequestOperation *operation , id responseObject))successBlock
+                          failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock
 {
-    return nil;
+    /*
+     RequestBuilder builder = new RequestBuilder("GET");
+     builder.setUrl(this.apiUrl + "/engines/itemsim/" + this.engine + "/topn." + this.apiFormat);
+     */
+    [self.requestManager GET:[NSString stringWithFormat:@"/engines/itemsim/%@/topn.%@", itemSimTopNRequest.engine, apiFormat] parameters:[itemSimTopNRequest getRequestParams] success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if (successBlock) {
+            successBlock(operation, responseObject);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        if (failureBlock) {
+            failureBlock(operation, error);
+        }
+    }];
 }
-- (NSArray *)getItemSimTopNWithEngine:(NSString *)engine iid:(NSString *)iid n:(NSInteger)n
+- (void)getItemSimTopNWithEngine:(NSString *)engine iid:(NSString *)iid n:(NSInteger)n
+                         success:(void (^)(AFHTTPRequestOperation *operation , id responseObject))successBlock
+                         failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock
 {
-    return nil;
+    PIOItemSimGetTopNRequest *itemSimTopNRequest = [self newItemSimGetTopNRequestWithEngine:engine iid:iid n:n attributes:nil];
+    [self getItemSimTopNWithRequest:itemSimTopNRequest success:successBlock failure:failureBlock];
 }
 
 
 //Sends an asynchronous get similar items request to the API.
-- (NSDictionary *)getItemSimTopNWithAttributesWithRequest:(PIOItemSimGetTopNRequest *)itemSimTopNRequest
+- (void)getItemSimTopNWithAttributesWithEngine:(NSString *)engine iid:(NSString *)iid n:(NSInteger)n attributes:(NSArray *)attributes
+                                       success:(void (^)(AFHTTPRequestOperation *operation , id responseObject))successBlock
+                                       failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock
 {
-    return nil;
-}
-- (NSDictionary *)getItemSimTopNWithAttributesWithEngine:(NSString *)engine iid:(NSString *)iid n:(NSInteger)n attributes:(NSArray *)attributes
-{
-    return nil;
+    PIOItemSimGetTopNRequest *itemSimTopNRequest = [self newItemSimGetTopNRequestWithEngine:engine iid:iid n:n attributes:attributes];
+    [self getItemSimTopNWithRequest:itemSimTopNRequest success:successBlock failure:failureBlock];
 }
 
 //Get status of the API.
+//TODO: is this still useful?
 - (NSString *)getStatus
 {
     return nil;
 }
 
 //Sends an asynchronous get user request to the API.
-- (PIOUser *)getUser:(NSString *)uid
+- (void)getUser:(NSString *)uid
+             success:(void (^)(AFHTTPRequestOperation *operation , id responseObject))successBlock
+             failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock
 {
-    return nil;
+    //Request request = (new RequestBuilder("GET")).setUrl(this.apiUrl + "/users/" + uid + "." + apiFormat).addQueryParameter("pio_appkey", this.appkey).build();
+    [self.requestManager GET:[NSString stringWithFormat:@"/users/%@.%@", uid, apiFormat] parameters:@{@"pio_appkey": self.appkey} success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if (successBlock) {
+            successBlock(operation, responseObject);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        if (failureBlock) {
+            failureBlock(operation, error);
+        }
+    }];
 }
 
 //Get a new user-action-on-item request object that can be used to add additional request parameters.
 - (PIOUserActionItemRequest *)newUserActionItemRequestWithUID:(NSString *)uid action:(NSString *)action iid:(NSString *)iid
 {
-    return nil;
+    PIOUserActionItemRequest *userActionItemRequest = [[PIOUserActionItemRequest alloc] initWithApiUrl:self.apiUrl apiFormat:apiFormat appkey:self.appkey action:action uid:uid iid:iid];
+    return userActionItemRequest;
 }
 
 //Identify the user ID.
@@ -205,12 +288,33 @@ int const HTTP_NOT_FOUND = 404;
 
 //Sends an asynchronous user-action-on-item request to the API.
 - (void)userActionItemWithRequest:(PIOUserActionItemRequest *)userActionItemRequest
+                          success:(void (^)(AFHTTPRequestOperation *operation , id responseObject))successBlock
+                          failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock
 {
-    return;
+    /*
+     RequestBuilder builder = new RequestBuilder("POST");
+     
+     String actionUrl = "/actions/u2i.";
+     builder.setUrl(this.apiUrl + actionUrl + this.apiFormat);
+     */
+    
+    [self.requestManager POST:[NSString stringWithFormat:@"/actions/u2i.%@", apiFormat] parameters:[userActionItemRequest getRequestParams] success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if (successBlock) {
+            successBlock(operation, responseObject);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        if (failureBlock) {
+            failureBlock(operation, error);
+        }
+    }];
 }
 - (void)userActionItemWithUID:(NSString *)uid action:(NSString *)action iid:(NSString *)iid
+                      success:(void (^)(AFHTTPRequestOperation *operation , id responseObject))successBlock
+                      failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock
 {
-    return;
+    PIOUserActionItemRequest *userActionItemRequest = [self newUserActionItemRequestWithUID:uid action:action iid:iid];
+    [self userActionItemWithRequest:userActionItemRequest success:successBlock failure:failureBlock];
+
 }
 
 @end

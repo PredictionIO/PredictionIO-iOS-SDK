@@ -39,6 +39,8 @@
  */
 - (id)initWithApiUrl:(NSString *)apiUrl apiFormat:(NSString *)apiFormat appkey:(NSString *)appkey engine:(NSString *)engine uid:(NSString *)uid n:(NSInteger)n;
 
+- (NSDictionary *)getRequestParams;
+
 ///**
 // * Add the "itypes" optional argument to the request.
 // *
