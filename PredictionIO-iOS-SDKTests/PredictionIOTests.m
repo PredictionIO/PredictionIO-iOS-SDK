@@ -27,6 +27,7 @@ NSString *const APP_KEY = @"BK54NvmtcbJAMdV1RbBFKyeUQlylCxU0EufjMI3e98S5UjGW3ZZQ
 NSString *const user1 = @"u001";
 NSString *const user2 = @"u002";
 NSString *const user3 = @"u003";
+NSString *const user4 = @"u004";
 
 //Sample Items
 NSString *const item1 = @"i001";
@@ -43,11 +44,9 @@ NSString *const item3 = @"i003";
     // Put setup code here. This method is called before the invocation of each test method in the class.
     self.client = [[PIOClient alloc] initWithAppKey: APP_KEY];
     
-    testItemToTypesDictionary = @{item1: @[@"t000", @"t001", @"t002"],
-                                  item2: @[@"t010", @"t011", @"t012"],
-                                  item3: @[@"t020", @"t021", @"t022"]};
-    
-    
+    testItemToTypesDictionary = @{item1: @[@"t001"],
+                                  item2: @[@"t001", @"t002"],
+                                  item3: @[@"t002", @"t003"]};
 }
 
 - (void)tearDown
@@ -81,11 +80,8 @@ NSString *const item3 = @"i003";
             [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
                                      beforeDate:[NSDate date]];
         }
-        
         XCTAssertEqual(status, 1);
     }
-    
-
 }
 
 - (void)testDeleteItem
@@ -105,14 +101,11 @@ NSString *const item3 = @"i003";
     
     while (status == 0)
     {
-        // run runloop so that async dispatch can be handled on main thread AFTER the operation has
-        // been marked as finished (even though the call backs haven't finished yet).
         [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
                                  beforeDate:[NSDate date]];
     }
     
     XCTAssertEqual(status, 1);
-
 }
 
 - (void)testGetItem
@@ -130,8 +123,6 @@ NSString *const item3 = @"i003";
     
     while (status == 0)
     {
-        // run runloop so that async dispatch can be handled on main thread AFTER the operation has
-        // been marked as finished (even though the call backs haven't finished yet).
         [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
                                  beforeDate:[NSDate date]];
     }
@@ -187,22 +178,18 @@ NSString *const item3 = @"i003";
         
         while (status == 0)
         {
-            // run runloop so that async dispatch can be handled on main thread AFTER the operation has
-            // been marked as finished (even though the call backs haven't finished yet).
             [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
                                      beforeDate:[NSDate date]];
         }
         
         XCTAssertEqual(status, 1);
     }
-
 }
 
 - (void)testNewCreateItemRequest
 {
     NSArray *itypes = [testItemToTypesDictionary objectForKey: item3];
-    
-    PIOCreateItemRequest *createItemRequest = [[PIOCreateItemRequest alloc] initWithApiUrl: @"" apiFormat: @"" appkey: APP_KEY iid: item3 itypes: itypes];
+    PIOCreateItemRequest *createItemRequest = [self.client newCreateItemRequestWithItemID: item3 itypes: itypes];
     
     __block int status = 0;
 
@@ -218,32 +205,20 @@ NSString *const item3 = @"i003";
     
     while (status == 0)
     {
-        // run runloop so that async dispatch can be handled on main thread AFTER the operation has
-        // been marked as finished (even though the call backs haven't finished yet).
         [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
                                  beforeDate:[NSDate date]];
     }
     
     XCTAssertEqual(status, 1);
-
-//- (PIOCreateItemRequest *)newCreateItemRequestWithItemID:(NSString *)iid itypes:(NSArray *)itypes;
 }
 
 - (void)testNewCreateUserRequest
 {
-//- (PIOCreateUserRequest *)newCreateUserRequestWithUserID:(NSString *)uid;
-}
-
-- (void)testNewItemRecGetTopNRequest
-{
-//- (PIOItemRecGetTopNRequest *)newItemRecGetTopNRequestWithEngine:(NSString *)engine uid:(NSString *)uid n:(NSInteger)n attributes:(NSArray *)attributes;
-}
-
-- (void)testGetItemRecTopN
-{
+    PIOCreateUserRequest *createUserRequest = [self.client newCreateUserRequestWithUserID: user4];
+    
     __block int status = 0;
-
-    [self.client getItemRecTopNWithEngine: @"item-rec" uid: user1 n: 1 success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    
+    [self.client createUserWithRequest: createUserRequest success:^(AFHTTPRequestOperation *operation, id responseObject) {
         status = 1;
         NSLog(@"Success!");
         NSLog(@"JSON: %@", responseObject);
@@ -255,50 +230,160 @@ NSString *const item3 = @"i003";
     
     while (status == 0)
     {
-        // run runloop so that async dispatch can be handled on main thread AFTER the operation has
-        // been marked as finished (even though the call backs haven't finished yet).
         [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
                                  beforeDate:[NSDate date]];
     }
     
     XCTAssertEqual(status, 1);
+}
+
+- (void)testNewItemRecGetTopNRequest
+{
+    PIOItemRecGetTopNRequest *itemRecGetTopNRequest = [self.client newItemRecGetTopNRequestWithEngine: @"item-rec" uid: user1 n: 10 attributes: nil];
     
-//- (NSArray *)getItemRecTopNWithEngine:(NSString *)engine uid:(NSString *)uid n:(NSInteger)n;
+    __block int status = 0;
+    
+    [self.client getItemRecTopNWithRequest: itemRecGetTopNRequest success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        status = 1;
+        NSLog(@"Success!");
+        NSLog(@"JSON: %@", responseObject);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        status = 2;
+        NSLog(@"Failure!");
+        NSLog(@"Error: %@", error);
+    }];
+    
+    while (status == 0)
+    {
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
+                                 beforeDate:[NSDate date]];
+    }
+    
+    XCTAssertEqual(status, 1);
+}
+
+- (void)testGetItemRecTopN
+{
+    __block int status = 0;
+
+    [self.client getItemRecTopNWithEngine: @"item-rec" uid: user1 n: 10 success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        status = 1;
+        NSLog(@"Success!");
+        NSLog(@"JSON: %@", responseObject);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        status = 2;
+        NSLog(@"Failure!");
+        NSLog(@"Error: %@", error);
+    }];
+    
+    while (status == 0)
+    {
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
+                                 beforeDate:[NSDate date]];
+    }
+    
+    XCTAssertEqual(status, 1);
 }
 
 - (void)testGetItemRecTopNWithAttributes
 {
-    //TODO: Implement test
-
-//- (NSDictionary *)getItemRecTopNWithAttributesWithEngine:(NSString *)engine uid:(NSString *)uid n:(NSInteger)n attributes:(NSArray *)attributes;
+    __block int status = 0;
+    
+    [self.client getItemRecTopNWithAttributesWithEngine: @"item-rec" uid: user1 n: 10 attributes: @[@"a001", @"a002"] success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        status = 1;
+        NSLog(@"Success!");
+        NSLog(@"JSON: %@", responseObject);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        status = 2;
+        NSLog(@"Failure!");
+        NSLog(@"Error: %@", error);
+    }];
+    
+    while (status == 0)
+    {
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
+                                 beforeDate:[NSDate date]];
+    }
+    
+    XCTAssertEqual(status, 1);
 }
 
 - (void)testNewItemSimGetTopNRequest
 {
-    //TODO: Implement test
-
-//- (PIOItemSimGetTopNRequest *)newItemSimGetTopNRequestWithEngine:(NSString *)engine iid:(NSString *)iid n:(NSInteger)n attributes:(NSArray *)attributes;
+    __block int status = 0;
+    
+    PIOItemSimGetTopNRequest *itemSimGetTopNRequest = [self.client newItemSimGetTopNRequestWithEngine: @"item-sim" iid: item2 n: 10 attributes: nil];
+    
+    [self.client getItemSimTopNWithRequest: itemSimGetTopNRequest success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        status = 1;
+        NSLog(@"Success!");
+        NSLog(@"JSON: %@", responseObject);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        status = 2;
+        NSLog(@"Failure!");
+        NSLog(@"Error: %@", error);
+    }];
+    
+    while (status == 0)
+    {
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
+                                 beforeDate:[NSDate date]];
+    }
+    
+    XCTAssertEqual(status, 1);
 }
 
--
-(void)testGetItemSimTopN
+-(void)testGetItemSimTopN
 {
-    //TODO: Implement test
+    __block int status = 0;
 
-//- (NSArray *)getItemSimTopNWithEngine:(NSString *)engine iid:(NSString *)iid n:(NSInteger)n;
+    [self.client getItemSimTopNWithEngine: @"item-sim" iid: item2 n: 10 success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        status = 1;
+        NSLog(@"Success!");
+        NSLog(@"JSON: %@", responseObject);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) { 
+        status = 2;
+        NSLog(@"Failure!");
+        NSLog(@"Error: %@", error);
+    }];
+    
+    while (status == 0)
+    {
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
+                                 beforeDate:[NSDate date]];
+    }
+    
+    XCTAssertEqual(status, 1);
 }
 
 - (void)testGetItemSimTopNWithAttributes
 {
-    //TODO: Implement test
-
-//- (NSDictionary *)getItemSimTopNWithAttributesWithEngine:(NSString *)engine iid:(NSString *)iid n:(NSInteger)n attributes:(NSArray *)attributes;
+    __block int status = 0;
+    
+    [self.client getItemSimTopNWithAttributesWithEngine: @"item-sim" iid: item2 n: 10 attributes: @[@"cost",@"price"] success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        status = 1;
+        NSLog(@"Success!");
+        NSLog(@"JSON: %@", responseObject);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        status = 2;
+        NSLog(@"Failure!");
+        NSLog(@"Error: %@", error);
+    }];
+    
+    while (status == 0)
+    {
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
+                                 beforeDate:[NSDate date]];
+    }
+    
+    XCTAssertEqual(status, 1);
 }
 
-- (void)testGetStatus
-{
-    //not implemented
-}
+
+//- (void)testGetStatus
+//{
+//    //not implemented
+//}
 
 - (void)testGetUser
 {
@@ -316,8 +401,6 @@ NSString *const item3 = @"i003";
     
     while (status == 0)
     {
-        // run runloop so that async dispatch can be handled on main thread AFTER the operation has
-        // been marked as finished (even though the call backs haven't finished yet).
         [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
                                  beforeDate:[NSDate date]];
     }
@@ -327,16 +410,36 @@ NSString *const item3 = @"i003";
 
 - (void)testNewUserActionItemRequest
 {
-    //TODO: Implement test
+    //User 2 like item 2 - userActionItemRequest
+    PIOUserActionItemRequest *userActionItemRequest = [self.client newUserActionItemRequestWithUID: user2 action: @"like" iid: item2];
+
+    __block int status = 0;
     
-//- (PIOUserActionItemRequest *)newUserActionItemRequestWithUID:(NSString *)uid action:(NSString *)action iid:(NSString *)iid;
+    [self.client userActionItemWithRequest: userActionItemRequest success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        status = 1;
+        NSLog(@"Success!");
+        NSLog(@"JSON: %@", responseObject);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        status = 2;
+        NSLog(@"Failure!");
+        NSLog(@"Error: %@", error);
+    }];
+    
+    
+    while (status == 0)
+    {
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
+                                 beforeDate:[NSDate date]];
+    }
+    
+    XCTAssertEqual(status, 1);
 }
 
 - (void)testIdentifyUserID
 {
-    //TODO: Implement test
-
-//- (void)identifyUserID:(NSString *)uid;
+    [self.client identifyUserID: user3];
+    
+    XCTAssertEqual(self.client.uid, user3);
 }
 
 - (void)testUserActionItem
@@ -404,11 +507,7 @@ NSString *const item3 = @"i003";
     }
     
     XCTAssertEqual(status, 1);
-    
-//- (void)userActionItemWithUID:(NSString *)uid action:(NSString *)action iid:(NSString *)iid;
 }
-
-#define Helper Methods
 
 
 @end
