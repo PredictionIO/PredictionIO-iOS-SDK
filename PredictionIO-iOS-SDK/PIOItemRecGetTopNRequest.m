@@ -63,7 +63,7 @@
         [requestParams setObject:[NSString stringWithFormat:@"%@", self.unit] forKey:@"pio_unit"];
     }
     if (self.attributes && [self.attributes count] > 0) {
-        [requestParams setObject:[self.itypes componentsJoinedByString:@","] forKey:@"pio_attributes"];
+        [requestParams setObject:[self.attributes componentsJoinedByString:@","] forKey:@"pio_attributes"];
     }
     return requestParams;
 }

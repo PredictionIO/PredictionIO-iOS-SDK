@@ -10,12 +10,31 @@
 #import "PIOClient.h"
 #import "AFHTTPRequestOperation.h"
 
-@interface PredictionIOTests : XCTestCase
+@interface PredictionIOTests : XCTestCase {
+    NSDictionary *testItemToTypesDictionary;
+}
 
 @property (nonatomic, strong) PIOClient *client;
 @property (nonatomic, strong) NSCondition *networkResponse;
 
 @end
+
+
+//API KEY
+NSString *const APP_KEY = @"BK54NvmtcbJAMdV1RbBFKyeUQlylCxU0EufjMI3e98S5UjGW3ZZQ0Pn0LBsSxj1h";
+
+//Sample Users
+NSString *const user1 = @"u001";
+NSString *const user2 = @"u002";
+NSString *const user3 = @"u003";
+NSString *const user4 = @"u004";
+
+//Sample Items
+NSString *const item1 = @"i001";
+NSString *const item2 = @"i002";
+NSString *const item3 = @"i003";
+
+//
 
 @implementation PredictionIOTests
 
@@ -23,7 +42,11 @@
 {
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
-    self.client = [[PIOClient alloc] initWithAppKey:@"FA2ZhbMtKf1F3FE7dXpUQ4Y0gmthHMigZdZMy71ze1AFdNqjeSTCwmIVuGvcz795"];
+    self.client = [[PIOClient alloc] initWithAppKey: APP_KEY];
+    
+    testItemToTypesDictionary = @{item1: @[@"t001"],
+                                  item2: @[@"t001", @"t002"],
+                                  item3: @[@"t002", @"t003"]};
 }
 
 - (void)tearDown
@@ -34,21 +57,61 @@
 
 - (void)testCreateItem
 {
-    /* - (void)createItemWithIID:(NSString *)iid itypes:(NSArray *)itypes
-success:(void (^)(AFHTTPRequestOperation *operation , id responseObject))successBlock
-failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock;
-     */
+    for (NSString *item in [testItemToTypesDictionary allKeys]) {
+        __block int status = 0;
+        
+        NSArray *itemTypes = [testItemToTypesDictionary objectForKey: item1];
+
+        [self.client createItemWithIID: item itypes: itemTypes success: ^(AFHTTPRequestOperation *operation, id responseObject) {
+            status = 1;
+            NSLog(@"Success!");
+            NSLog(@"JSON: %@", responseObject);
+            
+        } failure: ^(AFHTTPRequestOperation *operation, NSError *error) {
+            status = 2;
+            NSLog(@"Failure!");
+            NSLog(@"Error: %@", error);
+        }];
+        
+        while (status == 0)
+        {
+            // run runloop so that async dispatch can be handled on main thread AFTER the operation has
+            // been marked as finished (even though the call backs haven't finished yet).
+            [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
+                                     beforeDate:[NSDate date]];
+        }
+        XCTAssertEqual(status, 1);
+    }
 }
 
 - (void)testDeleteItem
 {
-//- (void)deleteItem:(NSString *)iid;
+    __block int status = 0;
+
+    //delete item1
+    [self.client deleteItem: item1 success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        status = 1;
+        NSLog(@"Success!");
+        NSLog(@"JSON: %@", responseObject);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        status = 2;
+        NSLog(@"Failure!");
+        NSLog(@"Error: %@", error);
+    }];
+    
+    while (status == 0)
+    {
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
+                                 beforeDate:[NSDate date]];
+    }
+    
+    XCTAssertEqual(status, 1);
 }
 
 - (void)testGetItem
 {
     __block int status = 0;
-    [self.client getItem:@"1" success:^(AFHTTPRequestOperation *operation , id responseObject){
+    [self.client getItem: item2 success:^(AFHTTPRequestOperation *operation , id responseObject){
         status = 1;
         NSLog(@"Success!");
         NSLog(@"JSON: %@", responseObject);
@@ -60,8 +123,6 @@ failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlo
     
     while (status == 0)
     {
-        // run runloop so that async dispatch can be handled on main thread AFTER the operation has
-        // been marked as finished (even though the call backs haven't finished yet).
         [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
                                  beforeDate:[NSDate date]];
     }
@@ -71,77 +132,382 @@ failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlo
 
 - (void)testCreateUser
 {
-//- (void)createUserWithUID:(NSString *)uid;
+    NSArray *usersToCreate = @[user1, user2, user3];
+    
+    for (NSString *user in usersToCreate) {
+        
+        __block int status = 0;
+        
+        [self.client createUserWithUID: user success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            status = 1;
+            NSLog(@"Success!");
+            NSLog(@"JSON: %@", responseObject);
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            status = 2;
+            NSLog(@"Failure!");
+            NSLog(@"Error: %@", error);
+        }];
+        
+        while (status == 0)
+        {
+            // run runloop so that async dispatch can be handled on main thread AFTER the operation has
+            // been marked as finished (even though the call backs haven't finished yet).
+            [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
+                                     beforeDate:[NSDate date]];
+        }
+        
+        XCTAssertEqual(status, 1);
+    }
+    
 }
 
 - (void)testDeleteUser
 {
-//- (void)deleteUser:(NSString *)uid;
+    for (NSString *user in @[item1]) {
+        __block int status = 0;
+        
+        [self.client deleteUser: user2 success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            status = 1;
+            NSLog(@"Success!");
+            NSLog(@"JSON: %@", responseObject);
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            status = 2;
+            NSLog(@"Failure!");
+            NSLog(@"Error: %@", error);
+        }];
+        
+        while (status == 0)
+        {
+            [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
+                                     beforeDate:[NSDate date]];
+        }
+        
+        XCTAssertEqual(status, 1);
+    }
 }
 
 - (void)testNewCreateItemRequest
 {
-//- (PIOCreateItemRequest *)newCreateItemRequestWithItemID:(NSString *)iid itypes:(NSArray *)itypes;
+    NSArray *itypes = [testItemToTypesDictionary objectForKey: item3];
+    PIOCreateItemRequest *createItemRequest = [self.client newCreateItemRequestWithItemID: item3 itypes: itypes];
+    
+    __block int status = 0;
+
+    [self.client createItemWithRequest: createItemRequest success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        status = 1;
+        NSLog(@"Success!");
+        NSLog(@"JSON: %@", responseObject);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        status = 2;
+        NSLog(@"Failure!");
+        NSLog(@"Error: %@", error);
+    }];
+    
+    while (status == 0)
+    {
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
+                                 beforeDate:[NSDate date]];
+    }
+    
+    XCTAssertEqual(status, 1);
 }
 
 - (void)testNewCreateUserRequest
 {
-//- (PIOCreateUserRequest *)newCreateUserRequestWithUserID:(NSString *)uid;
+    PIOCreateUserRequest *createUserRequest = [self.client newCreateUserRequestWithUserID: user4];
+    
+    __block int status = 0;
+    
+    [self.client createUserWithRequest: createUserRequest success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        status = 1;
+        NSLog(@"Success!");
+        NSLog(@"JSON: %@", responseObject);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        status = 2;
+        NSLog(@"Failure!");
+        NSLog(@"Error: %@", error);
+    }];
+    
+    while (status == 0)
+    {
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
+                                 beforeDate:[NSDate date]];
+    }
+    
+    XCTAssertEqual(status, 1);
 }
 
 - (void)testNewItemRecGetTopNRequest
 {
-//- (PIOItemRecGetTopNRequest *)newItemRecGetTopNRequestWithEngine:(NSString *)engine uid:(NSString *)uid n:(NSInteger)n attributes:(NSArray *)attributes;
+    PIOItemRecGetTopNRequest *itemRecGetTopNRequest = [self.client newItemRecGetTopNRequestWithEngine: @"item-rec" uid: user1 n: 10 attributes: nil];
+    
+    __block int status = 0;
+    
+    [self.client getItemRecTopNWithRequest: itemRecGetTopNRequest success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        status = 1;
+        NSLog(@"Success!");
+        NSLog(@"JSON: %@", responseObject);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        status = 2;
+        NSLog(@"Failure!");
+        NSLog(@"Error: %@", error);
+    }];
+    
+    while (status == 0)
+    {
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
+                                 beforeDate:[NSDate date]];
+    }
+    
+    XCTAssertEqual(status, 1);
 }
 
 - (void)testGetItemRecTopN
 {
-//- (NSArray *)getItemRecTopNWithEngine:(NSString *)engine uid:(NSString *)uid n:(NSInteger)n;
+    __block int status = 0;
+
+    [self.client getItemRecTopNWithEngine: @"item-rec" uid: user1 n: 10 success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        status = 1;
+        NSLog(@"Success!");
+        NSLog(@"JSON: %@", responseObject);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        status = 2;
+        NSLog(@"Failure!");
+        NSLog(@"Error: %@", error);
+    }];
+    
+    while (status == 0)
+    {
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
+                                 beforeDate:[NSDate date]];
+    }
+    
+    XCTAssertEqual(status, 1);
 }
 
 - (void)testGetItemRecTopNWithAttributes
 {
-//- (NSDictionary *)getItemRecTopNWithAttributesWithEngine:(NSString *)engine uid:(NSString *)uid n:(NSInteger)n attributes:(NSArray *)attributes;
+    __block int status = 0;
+    
+    [self.client getItemRecTopNWithAttributesWithEngine: @"item-rec" uid: user1 n: 10 attributes: @[@"a001", @"a002"] success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        status = 1;
+        NSLog(@"Success!");
+        NSLog(@"JSON: %@", responseObject);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        status = 2;
+        NSLog(@"Failure!");
+        NSLog(@"Error: %@", error);
+    }];
+    
+    while (status == 0)
+    {
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
+                                 beforeDate:[NSDate date]];
+    }
+    
+    XCTAssertEqual(status, 1);
 }
 
 - (void)testNewItemSimGetTopNRequest
 {
-//- (PIOItemSimGetTopNRequest *)newItemSimGetTopNRequestWithEngine:(NSString *)engine iid:(NSString *)iid n:(NSInteger)n attributes:(NSArray *)attributes;
+    __block int status = 0;
+    
+    PIOItemSimGetTopNRequest *itemSimGetTopNRequest = [self.client newItemSimGetTopNRequestWithEngine: @"item-sim" iid: item2 n: 10 attributes: nil];
+    
+    [self.client getItemSimTopNWithRequest: itemSimGetTopNRequest success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        status = 1;
+        NSLog(@"Success!");
+        NSLog(@"JSON: %@", responseObject);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        status = 2;
+        NSLog(@"Failure!");
+        NSLog(@"Error: %@", error);
+    }];
+    
+    while (status == 0)
+    {
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
+                                 beforeDate:[NSDate date]];
+    }
+    
+    XCTAssertEqual(status, 1);
 }
 
-- (void)testGetItemSimTopN
+-(void)testGetItemSimTopN
 {
-//- (NSArray *)getItemSimTopNWithEngine:(NSString *)engine iid:(NSString *)iid n:(NSInteger)n;
+    __block int status = 0;
+
+    [self.client getItemSimTopNWithEngine: @"item-sim" iid: item2 n: 10 success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        status = 1;
+        NSLog(@"Success!");
+        NSLog(@"JSON: %@", responseObject);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) { 
+        status = 2;
+        NSLog(@"Failure!");
+        NSLog(@"Error: %@", error);
+    }];
+    
+    while (status == 0)
+    {
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
+                                 beforeDate:[NSDate date]];
+    }
+    
+    XCTAssertEqual(status, 1);
 }
 
 - (void)testGetItemSimTopNWithAttributes
 {
-//- (NSDictionary *)getItemSimTopNWithAttributesWithEngine:(NSString *)engine iid:(NSString *)iid n:(NSInteger)n attributes:(NSArray *)attributes;
+    __block int status = 0;
+    
+    [self.client getItemSimTopNWithAttributesWithEngine: @"item-sim" iid: item2 n: 10 attributes: @[@"cost",@"price"] success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        status = 1;
+        NSLog(@"Success!");
+        NSLog(@"JSON: %@", responseObject);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        status = 2;
+        NSLog(@"Failure!");
+        NSLog(@"Error: %@", error);
+    }];
+    
+    while (status == 0)
+    {
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
+                                 beforeDate:[NSDate date]];
+    }
+    
+    XCTAssertEqual(status, 1);
 }
 
-- (void)testGetStatus
-{
-//- (NSString *)getStatus;
-}
+
+//- (void)testGetStatus
+//{
+//    //not implemented
+//}
 
 - (void)testGetUser
 {
-//- (PIOUser *)getUser:(NSString *)uid;
+    __block int status = 0;
+    
+    [self.client getUser: user1 success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        status = 1;
+        NSLog(@"Success!");
+        NSLog(@"JSON: %@", responseObject);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        status = 2;
+        NSLog(@"Failure!");
+        NSLog(@"Error: %@", error);
+    }];
+    
+    while (status == 0)
+    {
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
+                                 beforeDate:[NSDate date]];
+    }
+    
+    XCTAssertEqual(status, 1);
 }
 
 - (void)testNewUserActionItemRequest
 {
-//- (PIOUserActionItemRequest *)newUserActionItemRequestWithUID:(NSString *)uid action:(NSString *)action iid:(NSString *)iid;
+    //User 2 like item 2 - userActionItemRequest
+    PIOUserActionItemRequest *userActionItemRequest = [self.client newUserActionItemRequestWithUID: user2 action: @"like" iid: item2];
+
+    __block int status = 0;
+    
+    [self.client userActionItemWithRequest: userActionItemRequest success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        status = 1;
+        NSLog(@"Success!");
+        NSLog(@"JSON: %@", responseObject);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        status = 2;
+        NSLog(@"Failure!");
+        NSLog(@"Error: %@", error);
+    }];
+    
+    
+    while (status == 0)
+    {
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
+                                 beforeDate:[NSDate date]];
+    }
+    
+    XCTAssertEqual(status, 1);
 }
 
 - (void)testIdentifyUserID
 {
-//- (void)identifyUserID:(NSString *)uid;
+    [self.client identifyUserID: user3];
+    
+    XCTAssertEqual(self.client.uid, user3);
 }
 
 - (void)testUserActionItem
 {
-//- (void)userActionItemWithUID:(NSString *)uid action:(NSString *)action iid:(NSString *)iid;
+    //like action for item1 by user1
+    __block int status = 0;
+
+    [self.client userActionItemWithUID: user1 action: @"like" iid: item1 success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        status = 1;
+        NSLog(@"Success!");
+        NSLog(@"JSON: %@", responseObject);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        status = 2;
+        NSLog(@"Failure!");
+        NSLog(@"Error: %@", error);
+    }];
+    
+    
+    while (status == 0)
+    {
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
+                                 beforeDate:[NSDate date]];
+    }
+    
+    XCTAssertEqual(status, 1);
+    
+    status = 0;
+    
+    //dislike action for item 2 by user1
+    [self.client userActionItemWithUID: user1 action: @"dislike" iid: item2 success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        status = 1;
+        NSLog(@"Success!");
+        NSLog(@"JSON: %@", responseObject);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        status = 2;
+        NSLog(@"Failure!");
+        NSLog(@"Error: %@", error);
+    }];
+    
+    while (status == 0)
+    {
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
+                                 beforeDate:[NSDate date]];
+    }
+    
+    XCTAssertEqual(status, 1);
+    
+    status = 0;
+    
+    //view action for item 3 by user1
+    [self.client userActionItemWithUID: user1 action: @"view" iid: item3 success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        status = 1;
+        NSLog(@"Success!");
+        NSLog(@"JSON: %@", responseObject);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        status = 2;
+        NSLog(@"Failure!");
+        NSLog(@"Error: %@", error);
+    }];
+    
+    while (status == 0)
+    {
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
+                                 beforeDate:[NSDate date]];
+    }
+    
+    XCTAssertEqual(status, 1);
 }
+
 
 @end
