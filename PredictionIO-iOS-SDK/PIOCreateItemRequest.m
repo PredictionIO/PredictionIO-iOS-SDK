@@ -19,7 +19,7 @@
         [self setAppkey:appkey];
         [self setIid:iid];
         [self setItypes:itypes];
-        [self setAttributes:[[NSDictionary alloc] init]];
+        [self setAttributes:[[NSMutableDictionary alloc] init]];
     }
     return self;
 }
