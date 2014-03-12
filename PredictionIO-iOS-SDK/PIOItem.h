@@ -14,7 +14,15 @@
 @property (strong, nonatomic) NSArray *itypes;
 @property (strong, nonatomic) NSDate *startT;
 @property (strong, nonatomic) NSDate *endT;
-@property (strong, nonatomic) NSNumber *latitude;
-@property (strong, nonatomic) NSNumber *longitude;
+@property (assign, nonatomic) double latitude;
+@property (assign, nonatomic) double longitude;
+@property (assign, nonatomic) double price;
+@property (assign, nonatomic) double profit;
+@property (assign, nonatomic) BOOL  inactive;
+
+
+- (NSString *) getCustomValueForKey: (NSString *) customKey;
+
++ (PIOItem *) deserializeFromJSON: (NSDictionary *) jsonDictionary;
 
 @end
