@@ -1,0 +1,12 @@
+{
+    "pio_iid":"testiid2",
+    "pio_itypes":["type1","type2"],
+    "pio_startT":123456789,
+    "pio_endT":1360647801400,
+    "pio_price":1.23,
+    "pio_profit":9.87,
+    "pio_latlng":[12.34,5.678],
+    "pio_inactive":true,
+    "custom2":"2.34",
+    "custom1":"value1"
+}

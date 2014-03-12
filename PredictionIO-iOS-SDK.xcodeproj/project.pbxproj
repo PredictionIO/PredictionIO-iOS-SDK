@@ -15,7 +15,7 @@
 		9A8BC835186CEC5000E09A7A /* PIOUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A8BC834186CEC5000E09A7A /* PIOUser.m */; };
 		9A8BC838186CEDF000E09A7A /* PIOUserActionItemRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A8BC837186CEDF000E09A7A /* PIOUserActionItemRequest.m */; };
 		9A974175186CC23600BE4C94 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A974174186CC23600BE4C94 /* Foundation.framework */; };
-		9A97417A186CC23600BE4C94 /* PIOClient.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9A974179186CC23600BE4C94 /* PIOClient.h */; };
+		9A97417A186CC23600BE4C94 /* PIOClient.h in Copy Files */ = {isa = PBXBuildFile; fileRef = 9A974179186CC23600BE4C94 /* PIOClient.h */; };
 		9A97417C186CC23600BE4C94 /* PIOClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A97417B186CC23600BE4C94 /* PIOClient.m */; };
 		9A974183186CC23600BE4C94 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A974182186CC23600BE4C94 /* XCTest.framework */; };
 		9A974184186CC23600BE4C94 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A974174186CC23600BE4C94 /* Foundation.framework */; };
@@ -30,6 +30,8 @@
 		9ADE4BCB187161490076326B /* AFSecurityPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ADE4BC5187161490076326B /* AFSecurityPolicy.m */; };
 		9ADE4BCC187161490076326B /* AFURLRequestSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ADE4BC7187161490076326B /* AFURLRequestSerialization.m */; };
 		9ADE4BCD187161490076326B /* AFURLResponseSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ADE4BC9187161490076326B /* AFURLResponseSerialization.m */; };
+		FA8C24FD18CFBDBF007B0873 /* testitem.json in Resources */ = {isa = PBXBuildFile; fileRef = FA8C24FC18CFBDBF007B0873 /* testitem.json */; };
+		FA8C250118CFBDF5007B0873 /* PIOMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = FA8C250018CFBDF5007B0873 /* PIOMessage.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,14 +45,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		9A97416F186CC23600BE4C94 /* CopyFiles */ = {
+		9A97416F186CC23600BE4C94 /* Copy Files */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
-				9A97417A186CC23600BE4C94 /* PIOClient.h in CopyFiles */,
+				9A97417A186CC23600BE4C94 /* PIOClient.h in Copy Files */,
 			);
+			name = "Copy Files";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -95,6 +98,9 @@
 		9ADE4BC7187161490076326B /* AFURLRequestSerialization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AFURLRequestSerialization.m; path = "PredictionIO-iOS-SDK/3rdParty/AFNetworking/AFURLRequestSerialization.m"; sourceTree = "<group>"; };
 		9ADE4BC8187161490076326B /* AFURLResponseSerialization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AFURLResponseSerialization.h; path = "PredictionIO-iOS-SDK/3rdParty/AFNetworking/AFURLResponseSerialization.h"; sourceTree = "<group>"; };
 		9ADE4BC9187161490076326B /* AFURLResponseSerialization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AFURLResponseSerialization.m; path = "PredictionIO-iOS-SDK/3rdParty/AFNetworking/AFURLResponseSerialization.m"; sourceTree = "<group>"; };
+		FA8C24FC18CFBDBF007B0873 /* testitem.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testitem.json; sourceTree = "<group>"; };
+		FA8C24FF18CFBDF5007B0873 /* PIOMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PIOMessage.h; sourceTree = "<group>"; };
+		FA8C250018CFBDF5007B0873 /* PIOMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PIOMessage.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -154,10 +160,6 @@
 			children = (
 				9A974179186CC23600BE4C94 /* PIOClient.h */,
 				9A97417B186CC23600BE4C94 /* PIOClient.m */,
-				9A8BC82A186CE34000E09A7A /* PIOItem.h */,
-				9A8BC82B186CE34000E09A7A /* PIOItem.m */,
-				9A8BC833186CEC5000E09A7A /* PIOUser.h */,
-				9A8BC834186CEC5000E09A7A /* PIOUser.m */,
 				9A8BC824186CDF6C00E09A7A /* PIOCreateItemRequest.h */,
 				9A8BC825186CDF6C00E09A7A /* PIOCreateItemRequest.m */,
 				9A8BC827186CE12D00E09A7A /* PIOCreateUserRequest.h */,
@@ -168,6 +170,7 @@
 				9A8BC831186CE77800E09A7A /* PIOItemSimGetTopNRequest.m */,
 				9A8BC836186CEDF000E09A7A /* PIOUserActionItemRequest.h */,
 				9A8BC837186CEDF000E09A7A /* PIOUserActionItemRequest.m */,
+				FA7AA49F18CD69B200560F38 /* PIOObjects */,
 				9ADE4BB7187160300076326B /* 3rdParty */,
 				9A974177186CC23600BE4C94 /* Supporting Files */,
 			);
@@ -185,6 +188,7 @@
 		9A97418A186CC23600BE4C94 /* PredictionIO-iOS-SDKTests */ = {
 			isa = PBXGroup;
 			children = (
+				FA8C24FE18CFBDC5007B0873 /* SampleData */,
 				9A974190186CC23600BE4C94 /* PredictionIOTests.m */,
 				9A97418B186CC23600BE4C94 /* Supporting Files */,
 			);
@@ -230,6 +234,27 @@
 			name = AFNetworking;
 			sourceTree = "<group>";
 		};
+		FA7AA49F18CD69B200560F38 /* PIOObjects */ = {
+			isa = PBXGroup;
+			children = (
+				9A8BC82A186CE34000E09A7A /* PIOItem.h */,
+				9A8BC82B186CE34000E09A7A /* PIOItem.m */,
+				9A8BC833186CEC5000E09A7A /* PIOUser.h */,
+				9A8BC834186CEC5000E09A7A /* PIOUser.m */,
+				FA8C24FF18CFBDF5007B0873 /* PIOMessage.h */,
+				FA8C250018CFBDF5007B0873 /* PIOMessage.m */,
+			);
+			name = PIOObjects;
+			sourceTree = "<group>";
+		};
+		FA8C24FE18CFBDC5007B0873 /* SampleData */ = {
+			isa = PBXGroup;
+			children = (
+				FA8C24FC18CFBDBF007B0873 /* testitem.json */,
+			);
+			name = SampleData;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -239,7 +264,7 @@
 			buildPhases = (
 				9A97416D186CC23600BE4C94 /* Sources */,
 				9A97416E186CC23600BE4C94 /* Frameworks */,
-				9A97416F186CC23600BE4C94 /* CopyFiles */,
+				9A97416F186CC23600BE4C94 /* Copy Files */,
 			);
 			buildRules = (
 			);
@@ -300,6 +325,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FA8C24FD18CFBDBF007B0873 /* testitem.json in Resources */,
 				9A97418F186CC23600BE4C94 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -313,6 +339,7 @@
 			files = (
 				9A8BC829186CE12D00E09A7A /* PIOCreateUserRequest.m in Sources */,
 				9ADE4BCB187161490076326B /* AFSecurityPolicy.m in Sources */,
+				FA8C250118CFBDF5007B0873 /* PIOMessage.m in Sources */,
 				9ADE4BC01871606A0076326B /* AFHTTPRequestOperationManager.m in Sources */,
 				9ADE4BCD187161490076326B /* AFURLResponseSerialization.m in Sources */,
 				9A8BC82F186CE44600E09A7A /* PIOItemRecGetTopNRequest.m in Sources */,
