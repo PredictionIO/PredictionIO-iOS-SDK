@@ -62,10 +62,10 @@ NSString *const item3 = @"i003";
         
         NSArray *itemTypes = [testItemToTypesDictionary objectForKey: item1];
 
-        [self.client createItemWithIID: item itypes: itemTypes success: ^(AFHTTPRequestOperation *operation, id responseObject) {
+        [self.client createItemWithIID: item itypes: itemTypes success: ^(AFHTTPRequestOperation *operation, PIOMessage *responseMessage) {
             status = 1;
             NSLog(@"Success!");
-            NSLog(@"JSON: %@", responseObject);
+            NSLog(@"Message: %@", responseMessage.message);
             
         } failure: ^(AFHTTPRequestOperation *operation, NSError *error) {
             status = 2;
@@ -89,10 +89,10 @@ NSString *const item3 = @"i003";
     __block int status = 0;
 
     //delete item1
-    [self.client deleteItem: item1 success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [self.client deleteItem: item1 success:^(AFHTTPRequestOperation *operation, PIOMessage *responseMessage) {
         status = 1;
         NSLog(@"Success!");
-        NSLog(@"JSON: %@", responseObject);
+        NSLog(@"Message: %@", responseMessage.message);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         status = 2;
         NSLog(@"Failure!");
@@ -111,10 +111,46 @@ NSString *const item3 = @"i003";
 - (void)testGetItem
 {
     __block int status = 0;
-    [self.client getItem: item2 success:^(AFHTTPRequestOperation *operation , id responseObject){
+    [self.client getItem: item2 success:^(AFHTTPRequestOperation *operation , PIOItem *responseItem){
         status = 1;
         NSLog(@"Success!");
-        NSLog(@"JSON: %@", responseObject);
+        NSLog(@"Response Item IID: %@", responseItem.iid);
+    } failure:^(AFHTTPRequestOperation *operation , NSError *error){
+        status = 2;
+        NSLog(@"Failure!");
+        NSLog(@"Error: %@", error);
+    }];
+    
+    while (status == 0)
+    {
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
+                                 beforeDate:[NSDate date]];
+    }
+    
+    XCTAssertEqual(status, 1);
+}
+
+- (void)testGetItemParams
+{
+    __block int status = 0;
+    [self.client getItem: @"testiid2" success:^(AFHTTPRequestOperation *operation , PIOItem *item){
+        status = 1;
+        NSLog(@"Success!");
+
+        XCTAssertTrue([item.iid isEqualToString: @"testiid2"]);
+        
+        XCTAssertTrue([item.itypes[0] isEqualToString: @"type1"]);
+        XCTAssertTrue([item.itypes[1] isEqualToString: @"type2"]);
+        
+        XCTAssertTrue([item.startT timeIntervalSince1970] == 123456789);
+        XCTAssertTrue([item.endT timeIntervalSince1970] == 1360647801400);
+        
+        XCTAssertTrue(item.latitude == 12.34);
+        XCTAssertTrue(item.longitude == 5.678);
+        
+        XCTAssertTrue([[item getCustomValueForKey: @"custom2" ] isEqualToString: @"2.34"]);
+        XCTAssertTrue([[item getCustomValueForKey: @"custom1" ] isEqualToString: @"value1"]);
+        
     } failure:^(AFHTTPRequestOperation *operation , NSError *error){
         status = 2;
         NSLog(@"Failure!");
@@ -138,10 +174,10 @@ NSString *const item3 = @"i003";
         
         __block int status = 0;
         
-        [self.client createUserWithUID: user success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [self.client createUserWithUID: user success:^(AFHTTPRequestOperation *operation, PIOMessage *responseMessage) {
             status = 1;
             NSLog(@"Success!");
-            NSLog(@"JSON: %@", responseObject);
+            NSLog(@"Response Message: %@", responseMessage.message);
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             status = 2;
             NSLog(@"Failure!");
@@ -166,10 +202,10 @@ NSString *const item3 = @"i003";
     for (NSString *user in @[item1]) {
         __block int status = 0;
         
-        [self.client deleteUser: user2 success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [self.client deleteUser: user success:^(AFHTTPRequestOperation *operation, PIOMessage *responseMessage) {
             status = 1;
             NSLog(@"Success!");
-            NSLog(@"JSON: %@", responseObject);
+            NSLog(@"Response Message: %@", responseMessage.message);
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             status = 2;
             NSLog(@"Failure!");
@@ -193,10 +229,49 @@ NSString *const item3 = @"i003";
     
     __block int status = 0;
 
-    [self.client createItemWithRequest: createItemRequest success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [self.client createItemWithRequest: createItemRequest success:^(AFHTTPRequestOperation *operation, PIOMessage *responseMessage) {
         status = 1;
         NSLog(@"Success!");
-        NSLog(@"JSON: %@", responseObject);
+        NSLog(@"Response Message: %@", responseMessage.message);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        status = 2;
+        NSLog(@"Failure!");
+        NSLog(@"Error: %@", error);
+    }];
+    
+    while (status == 0)
+    {
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
+                                 beforeDate:[NSDate date]];
+    }
+    
+    XCTAssertEqual(status, 1);
+}
+
+- (void)testNewCreateItemRequestParams
+{
+    
+    NSString *filePath = [[NSBundle bundleForClass: [self class]] pathForResource: @"testitem" ofType: @"json"];
+    NSData* content = [NSData dataWithContentsOfFile:filePath];
+    
+    NSDictionary *sampleResponse = [NSJSONSerialization JSONObjectWithData: content options: NSJSONReadingAllowFragments error: nil];
+    
+    PIOItem *item = [PIOItem deserializeFromJSON: sampleResponse];
+    
+    PIOCreateItemRequest *createItemRequest = [self.client newCreateItemRequestWithItemID: item.iid itypes: item.itypes];
+    createItemRequest.latitude = [NSNumber numberWithDouble: item.latitude];
+    createItemRequest.longitude = [NSNumber numberWithDouble: item.longitude];
+    createItemRequest.startT = item.startT;
+    createItemRequest.endT = item.endT;
+    [createItemRequest addAttributeWithName: @"custom1" value: [item getCustomValueForKey: @"custom1"]];
+    [createItemRequest addAttributeWithName: @"custom2" value: [item getCustomValueForKey: @"custom2"]];
+    
+    __block int status = 0;
+    
+    [self.client createItemWithRequest: createItemRequest success:^(AFHTTPRequestOperation *operation, PIOMessage *responseMessage) {
+        status = 1;
+        NSLog(@"Success!");
+        NSLog(@"Response Message: %@", responseMessage);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         status = 2;
         NSLog(@"Failure!");
@@ -218,10 +293,10 @@ NSString *const item3 = @"i003";
     
     __block int status = 0;
     
-    [self.client createUserWithRequest: createUserRequest success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [self.client createUserWithRequest: createUserRequest success:^(AFHTTPRequestOperation *operation, PIOMessage *responseMessage) {
         status = 1;
         NSLog(@"Success!");
-        NSLog(@"JSON: %@", responseObject);
+        NSLog(@"Response Message: %@", responseMessage);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         status = 2;
         NSLog(@"Failure!");
@@ -389,10 +464,10 @@ NSString *const item3 = @"i003";
 {
     __block int status = 0;
     
-    [self.client getUser: user1 success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [self.client getUser: user1 success:^(AFHTTPRequestOperation *operation, PIOUser *user) {
         status = 1;
         NSLog(@"Success!");
-        NSLog(@"JSON: %@", responseObject);
+        NSLog(@"User uid: %@", user.uid);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         status = 2;
         NSLog(@"Failure!");
@@ -415,10 +490,10 @@ NSString *const item3 = @"i003";
 
     __block int status = 0;
     
-    [self.client userActionItemWithRequest: userActionItemRequest success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [self.client userActionItemWithRequest: userActionItemRequest success:^(AFHTTPRequestOperation *operation, PIOMessage *responseMessage) {
         status = 1;
         NSLog(@"Success!");
-        NSLog(@"JSON: %@", responseObject);
+        NSLog(@"Response Message: %@", responseMessage.message);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         status = 2;
         NSLog(@"Failure!");
@@ -447,10 +522,10 @@ NSString *const item3 = @"i003";
     //like action for item1 by user1
     __block int status = 0;
 
-    [self.client userActionItemWithUID: user1 action: @"like" iid: item1 success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [self.client userActionItemWithUID: user1 action: @"like" iid: item1 success:^(AFHTTPRequestOperation *operation, PIOMessage *responseMessage) {
         status = 1;
         NSLog(@"Success!");
-        NSLog(@"JSON: %@", responseObject);
+        NSLog(@"Response Message: %@", responseMessage.message);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         status = 2;
         NSLog(@"Failure!");
@@ -469,10 +544,10 @@ NSString *const item3 = @"i003";
     status = 0;
     
     //dislike action for item 2 by user1
-    [self.client userActionItemWithUID: user1 action: @"dislike" iid: item2 success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [self.client userActionItemWithUID: user1 action: @"dislike" iid: item2 success:^(AFHTTPRequestOperation *operation, PIOMessage *responseMessage) {
         status = 1;
         NSLog(@"Success!");
-        NSLog(@"JSON: %@", responseObject);
+        NSLog(@"Response Message: %@", responseMessage.message);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         status = 2;
         NSLog(@"Failure!");
@@ -490,10 +565,10 @@ NSString *const item3 = @"i003";
     status = 0;
     
     //view action for item 3 by user1
-    [self.client userActionItemWithUID: user1 action: @"view" iid: item3 success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [self.client userActionItemWithUID: user1 action: @"view" iid: item3 success:^(AFHTTPRequestOperation *operation, PIOMessage *responseMessage) {
         status = 1;
         NSLog(@"Success!");
-        NSLog(@"JSON: %@", responseObject);
+        NSLog(@"Response Message: %@", responseMessage.message);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         status = 2;
         NSLog(@"Failure!");
@@ -507,6 +582,63 @@ NSString *const item3 = @"i003";
     }
     
     XCTAssertEqual(status, 1);
+}
+
+#pragma mark PIO-Object Tests
+
+- (void) testPIOItemDeserialize {
+    NSString *filePath = [[NSBundle bundleForClass: [self class]] pathForResource: @"testitem" ofType: @"json"];
+    NSData* content = [NSData dataWithContentsOfFile:filePath];
+        
+    NSDictionary *sampleResponse = [NSJSONSerialization JSONObjectWithData: content options: NSJSONReadingAllowFragments error: nil];
+    
+    PIOItem *item = [PIOItem deserializeFromJSON: sampleResponse];
+    
+    XCTAssertTrue([item.iid isEqualToString: @"testiid2"]);
+    
+    XCTAssertTrue([item.itypes[0] isEqualToString: @"type1"]);
+    XCTAssertTrue([item.itypes[1] isEqualToString: @"type2"]);
+    
+    XCTAssertTrue([item.startT timeIntervalSince1970] == 123456789);
+    XCTAssertTrue([item.endT timeIntervalSince1970] == 1360647801400);
+
+    XCTAssertTrue(item.profit == 9.87);
+    XCTAssertTrue(item.price == 1.23);
+    
+    XCTAssertTrue(item.latitude == 12.34);
+    XCTAssertTrue(item.longitude == 5.678);
+
+    XCTAssertTrue([[item getCustomValueForKey: @"custom2" ] isEqualToString: @"2.34"]);
+    XCTAssertTrue([[item getCustomValueForKey: @"custom1" ] isEqualToString: @"value1"]);
+}
+
+- (void) testPIOMessageDeserialize {
+    NSString *filePath = [[NSBundle bundleForClass: [self class]] pathForResource: @"testmessage" ofType: @"json"];
+    NSData* content = [NSData dataWithContentsOfFile:filePath];
+    
+    NSDictionary *sampleResponse = [NSJSONSerialization JSONObjectWithData: content options: NSJSONReadingAllowFragments error: nil];
+    
+    PIOMessage *message = [PIOMessage deserializeFromJSON: sampleResponse];
+    
+    XCTAssertTrue([message.message isEqualToString: @"User created."]);
+    
+}
+
+- (void) testPIOUserDeserialize {
+    NSString *filePath = [[NSBundle bundleForClass: [self class]] pathForResource: @"testuser" ofType: @"json"];
+    NSData* content = [NSData dataWithContentsOfFile:filePath];
+    
+    NSDictionary *sampleResponse = [NSJSONSerialization JSONObjectWithData: content options: NSJSONReadingAllowFragments error: nil];
+    
+    PIOUser *user = [PIOUser deserializeFromJSON: sampleResponse];
+    
+    XCTAssertTrue([user.uid isEqualToString: @"testuid2"]);
+    
+    XCTAssertTrue(user.latitude == 12.34);
+    XCTAssertTrue(user.longitude == 5.678);
+    
+    XCTAssertTrue([[user getCustomValueForKey: @"custom2" ] isEqualToString: @"2.34"]);
+    XCTAssertTrue([[user getCustomValueForKey: @"custom1" ] isEqualToString: @"value1"]);
 }
 
 

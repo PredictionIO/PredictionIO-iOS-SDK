@@ -11,7 +11,11 @@
 @interface PIOUser : NSObject
 
 @property (strong, nonatomic) NSString *uid;
-@property (strong, nonatomic) NSNumber *latitude;
-@property (strong, nonatomic) NSNumber *longitude;
+@property (assign, nonatomic) double latitude;
+@property (assign, nonatomic) double longitude;
+@property (assign, nonatomic) BOOL inactive;
 
+- (NSString *) getCustomValueForKey: (NSString *) customKey;
+
++ (PIOUser *) deserializeFromJSON: (NSDictionary *) jsonDictionary;
 @end

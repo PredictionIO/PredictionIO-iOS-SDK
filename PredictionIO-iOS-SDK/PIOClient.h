@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "PIOItem.h"
 #import "PIOUser.h"
+#import "PIOMessage.h"
 #import "PIOCreateItemRequest.h"
 #import "PIOCreateUserRequest.h"
 #import "PIOItemRecGetTopNRequest.h"
@@ -38,35 +39,35 @@
 
 //Sends an asynchronous create item request to the API.
 - (void)createItemWithRequest:(PIOCreateItemRequest *)createItemRequest
-                      success:(void (^)(AFHTTPRequestOperation *operation , id responseObject))successBlock
+                      success:(void (^)(AFHTTPRequestOperation *operation , PIOMessage *responseMessage))successBlock
                       failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock;
 - (void)createItemWithIID:(NSString *)iid itypes:(NSArray *)itypes
-                  success:(void (^)(AFHTTPRequestOperation *operation , id responseObject))successBlock
+                  success:(void (^)(AFHTTPRequestOperation *operation , PIOMessage *responseMessage))successBlock
                   failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock;
 
 //Sends an asynchronous delete item request to the API.
 - (void)deleteItem:(NSString *)iid
-           success:(void (^)(AFHTTPRequestOperation *operation , id responseObject))successBlock
+           success:(void (^)(AFHTTPRequestOperation *operation , PIOMessage *responseMessage))successBlock
            failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock;
 
 //Sends an asynchronous get item request to the API. Execute success block if request is successful; execute failure block otherwise.
 //Note: sucesss/failure blocks are called on the main thread after the request returns.
 - (void)getItem:(NSString *)iid
-        success:(void (^)(AFHTTPRequestOperation *operation , id responseObject))successBlock
+        success:(void (^)(AFHTTPRequestOperation *operation , PIOItem *item))successBlock
         failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock;
 
 //Sends an asynchronous create user request to the API.
 - (void)createUserWithRequest:(PIOCreateUserRequest *)createUserRequest
-                      success:(void (^)(AFHTTPRequestOperation *operation , id responseObject))successBlock
+                      success:(void (^)(AFHTTPRequestOperation *operation , PIOMessage *responseMessage))successBlock
                       failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock;
 - (void)createUserWithUID:(NSString *)uid
-                  success:(void (^)(AFHTTPRequestOperation *operation , id responseObject))successBlock
+                  success:(void (^)(AFHTTPRequestOperation *operation , PIOMessage *responseMessage))successBlock
                   failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock;
 
 
 //Sends an asynchronous delete user request to the API.
 - (void)deleteUser:(NSString *)uid
-           success:(void (^)(AFHTTPRequestOperation *operation , id responseObject))successBlock
+           success:(void (^)(AFHTTPRequestOperation *operation , PIOMessage *responseMessage))successBlock
            failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock;
 
 //Get a new CreateItemRequest object that can be used to add additional item attributes.
@@ -113,7 +114,7 @@
 
 //Sends an asynchronous get user request to the API.
 - (void)getUser:(NSString *)uid
-             success:(void (^)(AFHTTPRequestOperation *operation , id responseObject))successBlock
+             success:(void (^)(AFHTTPRequestOperation *operation , PIOUser *user))successBlock
              failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock;
 
 //Get a new user-action-on-item request object that can be used to add additional request parameters.
@@ -124,10 +125,10 @@
 
 //Sends an asynchronous user-action-on-item request to the API.
 - (void)userActionItemWithRequest:(PIOUserActionItemRequest *)userActionItemRequest
-                          success:(void (^)(AFHTTPRequestOperation *operation , id responseObject))successBlock
+                          success:(void (^)(AFHTTPRequestOperation *operation , PIOMessage *responseMessage))successBlock
                           failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock;
 - (void)userActionItemWithUID:(NSString *)uid action:(NSString *)action iid:(NSString *)iid
-                      success:(void (^)(AFHTTPRequestOperation *operation , id responseObject))successBlock
+                      success:(void (^)(AFHTTPRequestOperation *operation , PIOMessage *responseMessage))successBlock
                       failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock;
 
 @end

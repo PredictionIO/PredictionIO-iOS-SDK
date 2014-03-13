@@ -48,12 +48,14 @@ int const HTTP_NOT_FOUND = 404;
 
 //Sends an asynchronous create item request to the API.
 - (void)createItemWithRequest:(PIOCreateItemRequest *)createItemRequest
-                      success:(void (^)(AFHTTPRequestOperation *operation , id responseObject))successBlock
+                      success:(void (^)(AFHTTPRequestOperation *operation , PIOMessage *responseMessage))successBlock
                       failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock;
 {
-    [self.requestManager POST:[NSString stringWithFormat:@"/items.%@", apiFormat] parameters:[createItemRequest getRequestParams] success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [self.requestManager POST:[NSString stringWithFormat:@"/items.%@", apiFormat] parameters:[createItemRequest getRequestParams] success:^(AFHTTPRequestOperation *operation, id responseJSON) {
+        
         if (successBlock) {
-            successBlock(operation, responseObject);
+            PIOMessage *message = [PIOMessage deserializeFromJSON: (NSDictionary *)responseJSON];
+            successBlock(operation, message);
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         if (failureBlock) {
@@ -62,7 +64,7 @@ int const HTTP_NOT_FOUND = 404;
     }];
 }
 - (void)createItemWithIID:(NSString *)iid itypes:(NSArray *)itypes
-                  success:(void (^)(AFHTTPRequestOperation *operation , id responseObject))successBlock
+                  success:(void (^)(AFHTTPRequestOperation *operation , PIOMessage *responseMessage))successBlock
                   failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock
 {
     PIOCreateItemRequest *createItemRequest = [[PIOCreateItemRequest alloc] initWithApiUrl:self.apiUrl apiFormat:apiFormat appkey:self.appkey iid:iid itypes:itypes];
@@ -71,12 +73,13 @@ int const HTTP_NOT_FOUND = 404;
 
 //Sends an asynchronous delete item request to the API.
 - (void)deleteItem:(NSString *)iid
-           success:(void (^)(AFHTTPRequestOperation *operation , id responseObject))successBlock
+           success:(void (^)(AFHTTPRequestOperation *operation , PIOMessage *responseMessage))successBlock
            failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock
 {
-    [self.requestManager DELETE:[NSString stringWithFormat:@"/items/%@.%@", iid, apiFormat] parameters:@{@"pio_appkey": self.appkey} success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [self.requestManager DELETE:[NSString stringWithFormat:@"/items/%@.%@", iid, apiFormat] parameters:@{@"pio_appkey": self.appkey} success:^(AFHTTPRequestOperation *operation, id responseJSON) {
         if (successBlock) {
-            successBlock(operation, responseObject);
+            PIOMessage *message = [PIOMessage deserializeFromJSON: (NSDictionary *)responseJSON];
+            successBlock(operation, message);
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         if (failureBlock) {
@@ -87,12 +90,13 @@ int const HTTP_NOT_FOUND = 404;
 
 //Sends an asynchronous get item request to the API. Execute success block if request is successful; execute failure block otherwise.
 - (void)getItem:(NSString *)iid
-        success:(void (^)(AFHTTPRequestOperation *operation , id responseObject))successBlock
+        success:(void (^)(AFHTTPRequestOperation *operation , PIOItem *item))successBlock
         failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock;
 {
-    [self.requestManager GET:[NSString stringWithFormat:@"/items/%@.%@", iid, apiFormat] parameters:@{@"pio_appkey": self.appkey} success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [self.requestManager GET:[NSString stringWithFormat:@"/items/%@.%@", iid, apiFormat] parameters:@{@"pio_appkey": self.appkey} success:^(AFHTTPRequestOperation *operation, id responseJSON) {
         if (successBlock) {
-            successBlock(operation, responseObject);
+            PIOItem *item = [PIOItem deserializeFromJSON: (NSDictionary *)responseJSON];
+            successBlock(operation, item);
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         if (failureBlock) {
@@ -103,12 +107,13 @@ int const HTTP_NOT_FOUND = 404;
 
 //Sends an asynchronous create user request to the API.
 - (void)createUserWithRequest:(PIOCreateUserRequest *)createUserRequest
-                      success:(void (^)(AFHTTPRequestOperation *operation , id responseObject))successBlock
+                      success:(void (^)(AFHTTPRequestOperation *operation , PIOMessage *responseMessage))successBlock
                       failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock
 {
-    [self.requestManager POST:[NSString stringWithFormat:@"/users.%@", apiFormat] parameters:[createUserRequest getRequestParams] success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [self.requestManager POST:[NSString stringWithFormat:@"/users.%@", apiFormat] parameters:[createUserRequest getRequestParams] success:^(AFHTTPRequestOperation *operation, id responseJSON) {
         if (successBlock) {
-            successBlock(operation, responseObject);
+            PIOMessage *message = [PIOMessage deserializeFromJSON: (NSDictionary *)responseJSON];
+            successBlock(operation, message);
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         if (failureBlock) {
@@ -118,7 +123,7 @@ int const HTTP_NOT_FOUND = 404;
 }
 
 - (void)createUserWithUID:(NSString *)uid
-                  success:(void (^)(AFHTTPRequestOperation *operation , id responseObject))successBlock
+                  success:(void (^)(AFHTTPRequestOperation *operation , PIOMessage *responseMessage))successBlock
                   failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock
 {
     PIOCreateUserRequest *createUserRequest = [[PIOCreateUserRequest alloc] initWithApiUrl:self.apiUrl apiFormat:apiFormat appkey:self.appkey uid:uid];
@@ -128,17 +133,14 @@ int const HTTP_NOT_FOUND = 404;
 
 //Sends an asynchronous delete user request to the API.
 - (void)deleteUser:(NSString *)uid
-           success:(void (^)(AFHTTPRequestOperation *operation , id responseObject))successBlock
+           success:(void (^)(AFHTTPRequestOperation *operation , PIOMessage *responseMessage))successBlock
            failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock
 {
-    /*
-     RequestBuilder builder = new RequestBuilder("DELETE");
-     builder.setUrl(this.apiUrl + "/users/" + uid + "." + apiFormat);
-     builder.addQueryParameter("pio_appkey", this.appkey);
-    */
-    [self.requestManager DELETE:[NSString stringWithFormat:@"/users/%@.%@", uid, apiFormat] parameters:@{@"pio_appkey": self.appkey} success:^(AFHTTPRequestOperation *operation, id responseObject) {
+
+    [self.requestManager DELETE:[NSString stringWithFormat:@"/users/%@.%@", uid, apiFormat] parameters:@{@"pio_appkey": self.appkey} success:^(AFHTTPRequestOperation *operation, id responseJSON) {
         if (successBlock) {
-            successBlock(operation, responseObject);
+            PIOMessage *message = [PIOMessage deserializeFromJSON: (NSDictionary *)responseJSON];
+            successBlock(operation, message);
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         if (failureBlock) {
@@ -258,13 +260,14 @@ int const HTTP_NOT_FOUND = 404;
 
 //Sends an asynchronous get user request to the API.
 - (void)getUser:(NSString *)uid
-             success:(void (^)(AFHTTPRequestOperation *operation , id responseObject))successBlock
+             success:(void (^)(AFHTTPRequestOperation *operation , PIOUser *user))successBlock
              failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock
 {
     //Request request = (new RequestBuilder("GET")).setUrl(this.apiUrl + "/users/" + uid + "." + apiFormat).addQueryParameter("pio_appkey", this.appkey).build();
-    [self.requestManager GET:[NSString stringWithFormat:@"/users/%@.%@", uid, apiFormat] parameters:@{@"pio_appkey": self.appkey} success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [self.requestManager GET:[NSString stringWithFormat:@"/users/%@.%@", uid, apiFormat] parameters:@{@"pio_appkey": self.appkey} success:^(AFHTTPRequestOperation *operation, id responseJSON) {
         if (successBlock) {
-            successBlock(operation, responseObject);
+            PIOUser *user = [PIOUser deserializeFromJSON: (NSDictionary *)responseJSON];
+            successBlock(operation, user);
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         if (failureBlock) {
@@ -288,19 +291,14 @@ int const HTTP_NOT_FOUND = 404;
 
 //Sends an asynchronous user-action-on-item request to the API.
 - (void)userActionItemWithRequest:(PIOUserActionItemRequest *)userActionItemRequest
-                          success:(void (^)(AFHTTPRequestOperation *operation , id responseObject))successBlock
+                          success:(void (^)(AFHTTPRequestOperation *operation , PIOMessage *responseMessage))successBlock
                           failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock
 {
-    /*
-     RequestBuilder builder = new RequestBuilder("POST");
-     
-     String actionUrl = "/actions/u2i.";
-     builder.setUrl(this.apiUrl + actionUrl + this.apiFormat);
-     */
     
-    [self.requestManager POST:[NSString stringWithFormat:@"/actions/u2i.%@", apiFormat] parameters:[userActionItemRequest getRequestParams] success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [self.requestManager POST:[NSString stringWithFormat:@"/actions/u2i.%@", apiFormat] parameters:[userActionItemRequest getRequestParams] success:^(AFHTTPRequestOperation *operation, id responseJSON) {
         if (successBlock) {
-            successBlock(operation, responseObject);
+            PIOMessage *message = [PIOMessage deserializeFromJSON: (NSDictionary *)responseJSON];
+            successBlock(operation, message);
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         if (failureBlock) {
@@ -309,7 +307,7 @@ int const HTTP_NOT_FOUND = 404;
     }];
 }
 - (void)userActionItemWithUID:(NSString *)uid action:(NSString *)action iid:(NSString *)iid
-                      success:(void (^)(AFHTTPRequestOperation *operation , id responseObject))successBlock
+                      success:(void (^)(AFHTTPRequestOperation *operation , PIOMessage *responseMessage))successBlock
                       failure:(void (^)(AFHTTPRequestOperation *operation , NSError *error))failureBlock
 {
     PIOUserActionItemRequest *userActionItemRequest = [self newUserActionItemRequestWithUID:uid action:action iid:iid];

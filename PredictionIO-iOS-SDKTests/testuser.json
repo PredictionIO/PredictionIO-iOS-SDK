@@ -1,0 +1,7 @@
+{
+    "pio_uid":"testuid2",
+    "pio_latlng":[12.34,5.678],
+    "pio_inactive":true,
+    "custom2":"2.34",
+    "custom1":"value1"
+}
