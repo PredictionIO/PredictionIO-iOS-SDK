@@ -38,16 +38,16 @@
     [requestParams setObject:self.appkey forKey:@"pio_appkey"];
     [requestParams setObject:self.iid forKey:@"pio_iid"];
     if (self.itypes && [self.itypes count] > 0) {
-        [requestParams setObject:[self.itypes componentsJoinedByString:@","] forKey:@"pio_itypes"];
+        [requestParams setObject: [self.itypes componentsJoinedByString: @","] forKey:@"pio_itypes"];
     }
     if (self.latitude && self.longitude) {  //TODO: NSNumber to string need format checking
-        [requestParams setObject:[NSString stringWithFormat:@"%@,%@", self.latitude, self.longitude] forKey:@"pio_latlng"];
+        [requestParams setObject: [NSString stringWithFormat: @"%@,%@", self.latitude, self.longitude] forKey:@"pio_latlng"];
     }
     if (self.startT) {   //TODO: NSDate to string need format checking
-        [requestParams setObject:[NSString stringWithFormat:@"%@", self.startT] forKey:@"pio_startT"];
+        [requestParams setObject: [NSNumber numberWithDouble: [self.startT timeIntervalSince1970]] forKey: @"pio_startT"];
     }
     if (self.endT) {    //TODO: NSDate to string need format checking
-        [requestParams setObject:[NSString stringWithFormat:@"%@", self.endT] forKey:@"pio_endT"];
+        [requestParams setObject: [NSNumber numberWithDouble: [self.endT timeIntervalSince1970]] forKey: @"pio_endT"];
     }
     if (self.attributes && [self.attributes count] > 0) {
         for (NSString *key in [self.attributes allKeys]) {

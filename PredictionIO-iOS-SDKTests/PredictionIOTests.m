@@ -130,6 +130,42 @@ NSString *const item3 = @"i003";
     XCTAssertEqual(status, 1);
 }
 
+- (void)testGetItemParams
+{
+    __block int status = 0;
+    [self.client getItem: @"testiid2" success:^(AFHTTPRequestOperation *operation , PIOItem *item){
+        status = 1;
+        NSLog(@"Success!");
+
+        XCTAssertTrue([item.iid isEqualToString: @"testiid2"]);
+        
+        XCTAssertTrue([item.itypes[0] isEqualToString: @"type1"]);
+        XCTAssertTrue([item.itypes[1] isEqualToString: @"type2"]);
+        
+        XCTAssertTrue([item.startT timeIntervalSince1970] == 123456789);
+        XCTAssertTrue([item.endT timeIntervalSince1970] == 1360647801400);
+        
+        XCTAssertTrue(item.latitude == 12.34);
+        XCTAssertTrue(item.longitude == 5.678);
+        
+        XCTAssertTrue([[item getCustomValueForKey: @"custom2" ] isEqualToString: @"2.34"]);
+        XCTAssertTrue([[item getCustomValueForKey: @"custom1" ] isEqualToString: @"value1"]);
+        
+    } failure:^(AFHTTPRequestOperation *operation , NSError *error){
+        status = 2;
+        NSLog(@"Failure!");
+        NSLog(@"Error: %@", error);
+    }];
+    
+    while (status == 0)
+    {
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
+                                 beforeDate:[NSDate date]];
+    }
+    
+    XCTAssertEqual(status, 1);
+}
+
 - (void)testCreateUser
 {
     NSArray *usersToCreate = @[user1, user2, user3];

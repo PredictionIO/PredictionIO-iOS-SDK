@@ -44,11 +44,11 @@
             item.itypes = [jsonDictionary objectForKey: key];
         }
         
-        else if ([key isEqualToString: kStartTKey]) {
+        else if ([key isEqualToString: kStartTKey]) {//assuming date is epoch, need to add case for formatted date
             item.startT = [NSDate dateWithTimeIntervalSince1970: [[jsonDictionary objectForKey: key] doubleValue]];
         }
         
-        else if ([key isEqualToString: kEndTKey]) {
+        else if ([key isEqualToString: kEndTKey]) {//assuming date is epoch, need to add case for formatted date
             item.endT = [NSDate dateWithTimeIntervalSince1970: [[jsonDictionary objectForKey: key] doubleValue]];
         }
         
