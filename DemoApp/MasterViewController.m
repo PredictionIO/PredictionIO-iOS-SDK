@@ -86,9 +86,11 @@
 - (void) loadData {
     //load data from food_simple.json
     NSString *filePath = [[NSBundle bundleForClass: [self class]] pathForResource: @"food_simple" ofType: @"json"];
-    NSData* content = [NSData dataWithContentsOfFile:filePath];
+    NSString* content = [NSString stringWithContentsOfFile: filePath encoding: NSUTF8StringEncoding error: nil];
     
-    NSDictionary *foodJson = [NSJSONSerialization JSONObjectWithData: content options:NSJSONReadingAllowFragments error: nil];
+    NSLog(@"%@", content);
+    
+    NSDictionary *foodJson = [NSJSONSerialization JSONObjectWithData: [content dataUsingEncoding: NSUTF8StringEncoding] options:NSJSONReadingAllowFragments error: nil];
     
     NSArray *foods = [foodJson objectForKey: @"foods"];
     

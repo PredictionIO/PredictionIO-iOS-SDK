@@ -31,6 +31,7 @@
 		9ADE4BCC187161490076326B /* AFURLRequestSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ADE4BC7187161490076326B /* AFURLRequestSerialization.m */; };
 		9ADE4BCD187161490076326B /* AFURLResponseSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ADE4BC9187161490076326B /* AFURLResponseSerialization.m */; };
 		FA40EAF818F49247002AFB2C /* FoodEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = FA40EAF718F49247002AFB2C /* FoodEntry.m */; };
+		FA40EAF918F498E8002AFB2C /* libPredictionIO-iOS-SDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A974171186CC23600BE4C94 /* libPredictionIO-iOS-SDK.a */; };
 		FA8C24FD18CFBDBF007B0873 /* testitem.json in Resources */ = {isa = PBXBuildFile; fileRef = FA8C24FC18CFBDBF007B0873 /* testitem.json */; };
 		FA8C250118CFBDF5007B0873 /* PIOMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = FA8C250018CFBDF5007B0873 /* PIOMessage.m */; };
 		FA8C250518CFEEB9007B0873 /* testmessage.json in Resources */ = {isa = PBXBuildFile; fileRef = FA8C250318CFEEB9007B0873 /* testmessage.json */; };
@@ -163,6 +164,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FA40EAF918F498E8002AFB2C /* libPredictionIO-iOS-SDK.a in Frameworks */,
 				FADFDAFF18F36A74006AFD8A /* CoreGraphics.framework in Frameworks */,
 				FADFDB0018F36A74006AFD8A /* UIKit.framework in Frameworks */,
 				FADFDAFD18F36A74006AFD8A /* Foundation.framework in Frameworks */,
