@@ -13,11 +13,14 @@
 #import "FoodEntry.h"
 
 #define kFirstTimeLoadDataKey @"first_time_load"
+#define kUserListKey @"user_list"
 
 
 @interface MasterViewController () {
     MBProgressHUD *loadingHUD;
 }
+
+@property (nonatomic, strong) NSMutableArray *userList;
 
 @property (nonatomic, strong) NSMutableArray *foodList;
 @property (nonatomic, strong) PIOClient *client;
@@ -41,21 +44,28 @@
                    initWithAppKey: @"l7fdO5nw5N7djl8wpmfC2YyBm8nyMoWK5lPabRPd3LEZpq6ltnlpmm0Dqg5SyJ8o"
                    apiURL: @"http://localhost:8000"];
 
-    
+    //load data from file
     [self loadData];
     
     //First time: load sample data to PredictionIO server
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
     if ([defaults objectForKey: kFirstTimeLoadDataKey] == nil) {
-        
+        //create a user
+        self.userList = [[NSMutableArray alloc] initWithObjects: @"user1", nil];
+
         loadingHUD = [[MBProgressHUD alloc] initWithView: self.view];
-        loadingHUD.labelText = @"Loading data...";
+        loadingHUD.labelText = @"Creating PredictionIO items...";
         [loadingHUD show: YES];
         
         [self performSelectorInBackground: @selector(loadDataToPredictionIOServer) withObject: nil];
         
         [defaults setObject: @"no" forKey: kFirstTimeLoadDataKey];
+        [defaults setObject: self.userList forKey: kUserListKey];
+    }
+    //otherwise just load user list
+    else {
+        self.userList = [[NSMutableArray alloc] initWithArray: [defaults arrayForKey: kUserListKey]];
     }
     
     
@@ -93,6 +103,10 @@
         
         [self.foodList addObject: foodEntry];
     }
+    
+    NSLog(@"%lu", (unsigned long)self.foodList.count);
+    
+    [self.tableView reloadData];
 }
 
 /*
@@ -100,6 +114,18 @@
  */
 - (void) loadDataToPredictionIOServer {
 
+    //first create first user
+    [self.client createUserWithUID: @"user1" success:
+     ^(AFHTTPRequestOperation *operation, PIOMessage *responseMessage) {
+         NSLog(@"%@", responseMessage.message);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        [self showError: error];
+    }];
+    
+    //create all the items
+    for (FoodEntry *foodEntry in self.foodList) {
+        [self.client createItemWithIID: foodEntry.fid itypes: @[@"food"] success: nil failure: nil];
+    }
     
     loadingHUD.labelText = @"Done!";
     [loadingHUD hide: YES afterDelay: 0.5];
@@ -178,6 +204,14 @@
         FoodEntry *object = self.foodList[indexPath.row];
         [[segue destinationViewController] setDetailItem: object];
     }
+}
+
+#pragma mark - Error Helper
+
+- (void) showError: (NSError *) error {
+    UIAlertView *errorAlert = [[UIAlertView alloc] initWithTitle: @"Error" message: error.localizedDescription delegate: nil cancelButtonTitle: @"OK" otherButtonTitles: nil];
+    
+    [errorAlert show];
 }
 
 @end
