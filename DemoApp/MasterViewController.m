@@ -97,13 +97,22 @@
     //create food list of FoodEntry objects
     self.foodList = [[NSMutableArray alloc] init];
 
+    NSMutableDictionary *fidDictionary = [[NSMutableDictionary alloc] init];
+    
     for (NSDictionary *foodObject in foods) {
+        
+        if ([fidDictionary objectForKey: [foodObject objectForKey: @"id"]]) {
+            continue;
+        }
+        
         FoodEntry *foodEntry = [FoodEntry new];
         
         foodEntry.fid = [foodObject objectForKey: @"id"];
         foodEntry.name = [foodObject objectForKey: @"name"];
         
         [self.foodList addObject: foodEntry];
+        
+        [fidDictionary setObject: @"exists" forKey: foodEntry.fid];
     }
     
     NSLog(@"%lu", (unsigned long)self.foodList.count);
