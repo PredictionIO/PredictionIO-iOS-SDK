@@ -7,10 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FoodEntry.h"
+#import "PIOClient.h"
 
 @interface DetailViewController : UIViewController
 
-@property (strong, nonatomic) id detailItem;
+@property (strong, nonatomic) FoodEntry *foodEntry;
 
 @property (weak, nonatomic) IBOutlet UILabel *detailDescriptionLabel;
 @end

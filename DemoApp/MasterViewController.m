@@ -11,10 +11,11 @@
 #import "DetailViewController.h"
 #import "MBProgressHUD.h"
 #import "FoodEntry.h"
+#import "DetailViewController.h"
 
 #define kFirstTimeLoadDataKey @"first_time_load"
 #define kUserListKey @"user_list"
-
+#define kUserCreatedFoodListKey @"user_added_foods"
 
 @interface MasterViewController () {
     MBProgressHUD *loadingHUD;
@@ -44,16 +45,29 @@
                    initWithAppKey: @"l7fdO5nw5N7djl8wpmfC2YyBm8nyMoWK5lPabRPd3LEZpq6ltnlpmm0Dqg5SyJ8o"
                    apiURL: @"http://localhost:8000"];
 
-    //load data from file
-    [self loadData];
     
-    //First time: load sample data to PredictionIO server
+    //create atleast one user if it doesnt exist
+    if ([[NSUserDefaults standardUserDefaults] objectForKey: kUserListKey]) {
+        self.userList = [[NSMutableArray alloc] initWithArray: [[NSUserDefaults standardUserDefaults] objectForKey: kUserListKey]];
+    } else {
+        self.userList = [[NSMutableArray alloc] init];
+        [self createNewUser: @"DefaultUser"];
+    }
+    
+    
+    //create food list of FoodEntry objects
+    self.foodList = [[NSMutableArray alloc] init];
+    
+    //load data from file
+    [self loadFileData];
+    
+    //load data from user
+    [self loadUserCreatedData];
+    
+    //First time: send sample data to PredictionIO server
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
     if ([defaults objectForKey: kFirstTimeLoadDataKey] == nil) {
-        //create a user
-        self.userList = [[NSMutableArray alloc] initWithObjects: @"user1", nil];
-
         loadingHUD = [[MBProgressHUD alloc] initWithView: self.view];
         loadingHUD.labelText = @"Creating PredictionIO items...";
         [loadingHUD show: YES];
@@ -67,7 +81,6 @@
     else {
         self.userList = [[NSMutableArray alloc] initWithArray: [defaults arrayForKey: kUserListKey]];
     }
-    
     
 	// Do any additional setup after loading the view, typically from a nib.
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
@@ -83,7 +96,7 @@
 }
 
 #pragma mark - Data Loading
-- (void) loadData {
+- (void) loadFileData {
     //load data from food_simple.json
     NSString *filePath = [[NSBundle bundleForClass: [self class]] pathForResource: @"food_simple" ofType: @"json"];
     NSString* content = [NSString stringWithContentsOfFile: filePath encoding: NSUTF8StringEncoding error: nil];
@@ -93,9 +106,6 @@
     NSDictionary *foodJson = [NSJSONSerialization JSONObjectWithData: [content dataUsingEncoding: NSUTF8StringEncoding] options:NSJSONReadingAllowFragments error: nil];
     
     NSArray *foods = [foodJson objectForKey: @"foods"];
-    
-    //create food list of FoodEntry objects
-    self.foodList = [[NSMutableArray alloc] init];
 
     NSMutableDictionary *fidDictionary = [[NSMutableDictionary alloc] init];
     
@@ -120,18 +130,25 @@
     [self.tableView reloadData];
 }
 
+- (void) loadUserCreatedData {
+    NSArray *userCreatedFoods = [[NSUserDefaults standardUserDefaults] arrayForKey: kUserCreatedFoodListKey];
+    
+    for (NSDictionary *userFoodEntry in userCreatedFoods) {
+        FoodEntry *foodEntry = [FoodEntry new];
+        
+        foodEntry.fid = [userFoodEntry objectForKey: @"id"];
+        foodEntry.name = [userFoodEntry objectForKey: @"name"];
+        
+        [self.foodList addObject: foodEntry];
+    }
+    
+    [self.tableView reloadData];
+}
+
 /*
  * Add all FoodEntry items to the PredictionIO server (once only)
  */
 - (void) loadDataToPredictionIOServer {
-
-    //first create first user
-    [self.client createUserWithUID: @"user1" success:
-     ^(AFHTTPRequestOperation *operation, PIOMessage *responseMessage) {
-         NSLog(@"%@", responseMessage.message);
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        [self showError: error];
-    }];
     
     //create all the items
     for (FoodEntry *foodEntry in self.foodList) {
@@ -141,6 +158,46 @@
     loadingHUD.labelText = @"Done!";
     [loadingHUD hide: YES afterDelay: 0.5];
 }
+
+#pragma mark - adding user data
+
+- (void) createNewUser: (NSString *) uname {
+    [self.userList addObject: uname];
+    [[NSUserDefaults standardUserDefaults] setObject: self.userList forKey: kUserListKey];
+    
+    [self.client createUserWithUID: uname success:
+     ^(AFHTTPRequestOperation *operation, PIOMessage *responseMessage) {
+         NSLog(@"%@", responseMessage.message);
+     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+         [self showError: error];
+     }];
+}
+
+- (void) createNewFoodNamed: (NSString *) name withId: (NSString *) fid {
+    FoodEntry *foodEntry = [FoodEntry new];
+    
+    foodEntry.fid = fid;
+    foodEntry.name = name;
+    
+    //insert to the front of the food list
+    [self.foodList insertObject: foodEntry atIndex: 0];
+    
+    //save to userCreatedFoodList (update persistant storage)
+    NSArray *userCreatedFoods = [[NSUserDefaults standardUserDefaults] arrayForKey: kUserCreatedFoodListKey];
+    if (userCreatedFoods == nil) {
+        userCreatedFoods = @[@{@"id": fid, @"name": name}];
+        
+        [[NSUserDefaults standardUserDefaults] setObject: userCreatedFoods forKey: kUserCreatedFoodListKey];
+    } else {
+        NSMutableArray *newUserCreatedFoods = [NSMutableArray arrayWithArray: userCreatedFoods];
+        [newUserCreatedFoods addObject: @{@"id": fid, @"name": name}];
+        
+        [[NSUserDefaults standardUserDefaults] setObject: newUserCreatedFoods forKey: kUserCreatedFoodListKey];
+    }
+    
+    [self.tableView reloadData];
+}
+
 
 
 #pragma mark - UITableView Delegate
@@ -192,28 +249,13 @@
     }
 }
 
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([[segue identifier] isEqualToString:@"showDetail"]) {
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-        FoodEntry *object = self.foodList[indexPath.row];
-        [[segue destinationViewController] setDetailItem: object];
+        FoodEntry *foodEntry = self.foodList[indexPath.row];
+        DetailViewController *detailViewController = (DetailViewController *)[segue destinationViewController];
+        detailViewController.foodEntry = foodEntry;
     }
 }
 
