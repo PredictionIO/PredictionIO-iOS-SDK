@@ -13,9 +13,13 @@
 #import "FoodEntry.h"
 #import "DetailViewController.h"
 
+//userdefaults dictionary keys
 #define kFirstTimeLoadDataKey @"first_time_load"
 #define kUserListKey @"user_list"
 #define kUserCreatedFoodListKey @"user_added_foods"
+
+//uialertview tag identifiers
+#define kFoodNameAlertTag 0
 
 @interface MasterViewController () {
     MBProgressHUD *loadingHUD;
@@ -82,10 +86,8 @@
         self.userList = [[NSMutableArray alloc] initWithArray: [defaults arrayForKey: kUserListKey]];
     }
     
-	// Do any additional setup after loading the view, typically from a nib.
-    self.navigationItem.leftBarButtonItem = self.editButtonItem;
 
-    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject:)];
+    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addNewFoodEntry)];
     self.navigationItem.rightBarButtonItem = addButton;
 }
 
@@ -179,6 +181,9 @@
     foodEntry.fid = fid;
     foodEntry.name = name;
     
+    //create the food on PIO server
+    [self.client createItemWithIID: foodEntry.fid itypes: @[@"food"] success: nil failure: nil];
+    
     //insert to the front of the food list
     [self.foodList insertObject: foodEntry atIndex: 0];
     
@@ -198,18 +203,14 @@
     [self.tableView reloadData];
 }
 
+#pragma UI Actions
 
-
-#pragma mark - UITableView Delegate
-
-- (void)insertNewObject:(id)sender
-{
-    if (!self.foodList) {
-        self.foodList = [[NSMutableArray alloc] init];
-    }
-    [self.foodList insertObject:[NSDate date] atIndex:0];
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-    [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+- (void) addNewFoodEntry {
+    UIAlertView *addNewFoodAlert = [[UIAlertView alloc] initWithTitle:@"Add a new Food" message:@"What's it called?" delegate: self cancelButtonTitle:@"Add it" otherButtonTitles:nil];
+    
+    addNewFoodAlert.alertViewStyle = UIAlertViewStylePlainTextInput;
+    addNewFoodAlert.tag = kFoodNameAlertTag;
+    [addNewFoodAlert show];
 }
 
 #pragma mark - Table View
@@ -256,6 +257,18 @@
         FoodEntry *foodEntry = self.foodList[indexPath.row];
         DetailViewController *detailViewController = (DetailViewController *)[segue destinationViewController];
         detailViewController.foodEntry = foodEntry;
+    }
+}
+
+#pragma mark - UIAlertViewDelegate
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (alertView.tag == kFoodNameAlertTag) {
+        
+        NSString *name = [alertView textFieldAtIndex: 0].text;
+        NSString *fid  = name;
+        
+        [self createNewFoodNamed: name withId: fid];
     }
 }
 

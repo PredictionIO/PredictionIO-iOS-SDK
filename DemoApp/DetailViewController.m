@@ -7,29 +7,25 @@
 //
 
 #import "DetailViewController.h"
+#import "PAImageView.h"
+#import "PIOClient.h"
 
-@interface DetailViewController ()
-- (void)configureView;
+@interface DetailViewController () {
+    IBOutlet UIView *imageContainerView;
+}
+
 @end
 
 @implementation DetailViewController
 
 #pragma mark - Managing the detail item
 
-- (void)configureView
-{
-    // Update the user interface for the detail item.
-
-    if (self.foodEntry) {
-        self.detailDescriptionLabel.text = self.foodEntry.name;
-    }
-}
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
-    [self configureView];
+
+    self.title = @"Rate your Food!";
 }
 
 - (void)didReceiveMemoryWarning
