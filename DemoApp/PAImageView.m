@@ -7,7 +7,8 @@
 //
 
 #import "PAImageView.h"
-#import "AFNetworking/AFNetworking.h"
+#import "AFHTTPRequestOperation.h"
+#import "AFURLResponseSerialization.h"
 
 #pragma mark - Utils
 
@@ -117,12 +118,14 @@ NSString * const spm_identifier = @"spm.imagecache.tg";
         __weak __typeof(self)weakSelf = self;
         AFHTTPRequestOperation *requestOperation = [[AFHTTPRequestOperation alloc] initWithRequest:urlRequest];
         requestOperation.responseSerializer = [AFImageResponseSerializer serializer];
-        [requestOperation setDownloadProgressBlock:^(NSUInteger bytesRead, NSInteger totalBytesRead, NSInteger totalBytesExpectedToRead) {
+        
+        [requestOperation setDownloadProgressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
             CGFloat progress = (CGFloat)totalBytesRead/(CGFloat)totalBytesExpectedToRead;
             
             _progressLayer.strokeEnd        = progress;
             _backgroundLayer.strokeStart    = progress;
         }];
+
         [requestOperation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
             UIImage *image = responseObject;
             [weakSelf updateWithImage:image animated:YES];
