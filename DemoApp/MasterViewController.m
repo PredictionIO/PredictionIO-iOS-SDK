@@ -12,23 +12,19 @@
 #import "MBProgressHUD.h"
 #import "FoodEntry.h"
 #import "DetailViewController.h"
+#import "AppDelegate.h"
+#import "UserViewController.h"
 
 //userdefaults dictionary keys
 #define kFirstTimeLoadDataKey @"first_time_load"
-#define kUserListKey @"user_list"
 #define kUserCreatedFoodListKey @"user_added_foods"
 
 //uialertview tag identifiers
 #define kFoodNameAlertTag 0
 
-#define kDefaultUser @"DefaultUser"
-
 @interface MasterViewController () {
     MBProgressHUD *loadingHUD;
-    NSString *currentUser;
 }
-
-@property (nonatomic, strong) NSMutableArray *userList;
 
 @property (nonatomic, strong) NSMutableArray *foodList;
 @property (nonatomic, strong) PIOClient *client;
@@ -48,21 +44,7 @@
     
     self.title = @"Food Predictior";
     
-    self.client = [[PIOClient alloc]
-                   initWithAppKey: @"l7fdO5nw5N7djl8wpmfC2YyBm8nyMoWK5lPabRPd3LEZpq6ltnlpmm0Dqg5SyJ8o"
-                   apiURL: @"http://localhost:8000"];
-    
-    //create atleast one user if it doesnt exist
-    if ([[NSUserDefaults standardUserDefaults] objectForKey: kUserListKey]) {
-        self.userList = [[NSMutableArray alloc] initWithArray: [[NSUserDefaults standardUserDefaults] objectForKey: kUserListKey]];
-        
-        currentUser = [self.userList objectAtIndex: 0];
-    } else {
-        self.userList = [[NSMutableArray alloc] init];
-        currentUser = kDefaultUser;
-        [self createNewUser: kDefaultUser];
-    }
-    
+    self.client = ((AppDelegate *)[[UIApplication sharedApplication] delegate]).client;
     
     //create food list of FoodEntry objects
     self.foodList = [[NSMutableArray alloc] init];
@@ -84,11 +66,6 @@
         [self performSelectorInBackground: @selector(loadDataToPredictionIOServer) withObject: nil];
         
         [defaults setObject: @"no" forKey: kFirstTimeLoadDataKey];
-        [defaults setObject: self.userList forKey: kUserListKey];
-    }
-    //otherwise just load user list
-    else {
-        self.userList = [[NSMutableArray alloc] initWithArray: [defaults arrayForKey: kUserListKey]];
     }
     
 
@@ -100,6 +77,13 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - Open User Rec View Controller
+
+- (IBAction) openUsers {
+    UserViewController *userViewController = [self.storyboard instantiateViewControllerWithIdentifier: @"UserViewController"];
+    [self.navigationController pushViewController: userViewController animated: YES];
 }
 
 #pragma mark - Data Loading
@@ -152,8 +136,9 @@
     [self.tableView reloadData];
 }
 
+
 /*
- * Add all FoodEntry items to the PredictionIO server (once only)
+ * Add all FoodEntry items to the PredictionIO server (first run only)
  */
 - (void) loadDataToPredictionIOServer {
     
@@ -167,18 +152,6 @@
 }
 
 #pragma mark - adding user data
-
-- (void) createNewUser: (NSString *) uname {
-    [self.userList addObject: uname];
-    [[NSUserDefaults standardUserDefaults] setObject: self.userList forKey: kUserListKey];
-    
-    [self.client createUserWithUID: uname success:
-     ^(AFHTTPRequestOperation *operation, PIOMessage *responseMessage) {
-         NSLog(@"%@", responseMessage.message);
-     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-         [self showError: error];
-     }];
-}
 
 - (void) createNewFoodNamed: (NSString *) name withId: (NSString *) fid {
     FoodEntry *foodEntry = [FoodEntry new];
@@ -230,6 +203,10 @@
     return self.foodList.count;
 }
 
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    return @"Select a Food to view it, rate it, or make a conversion";
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
@@ -261,9 +238,7 @@
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         FoodEntry *foodEntry = self.foodList[indexPath.row];
         DetailViewController *detailViewController = (DetailViewController *)[segue destinationViewController];
-        detailViewController.client = self.client;
         detailViewController.foodEntry = foodEntry;
-        detailViewController.user = currentUser;
     }
 }
 
@@ -276,15 +251,9 @@
         NSString *fid  = name;
         
         [self createNewFoodNamed: name withId: fid];
+        
+        [self.tableView reloadData];
     }
-}
-
-#pragma mark - Error Helper
-
-- (void) showError: (NSError *) error {
-    UIAlertView *errorAlert = [[UIAlertView alloc] initWithTitle: @"Error" message: error.localizedDescription delegate: nil cancelButtonTitle: @"OK" otherButtonTitles: nil];
-    
-    [errorAlert show];
 }
 
 @end

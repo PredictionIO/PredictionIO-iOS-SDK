@@ -10,9 +10,29 @@
 
 @implementation AppDelegate
 
+#define kDefaultUser @"DefaultUser"
+#define kUserListKey @"user_list"
+
+
+#pragma mark - UIApplication Life Cycle
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    // Override point for customization after application launch.
+    self.client = [[PIOClient alloc]
+                   initWithAppKey: @"l7fdO5nw5N7djl8wpmfC2YyBm8nyMoWK5lPabRPd3LEZpq6ltnlpmm0Dqg5SyJ8o"
+                   apiURL: @"http://localhost:8000"];
+    
+    //create atleast one user if it doesnt exist
+    if ([[NSUserDefaults standardUserDefaults] objectForKey: kUserListKey]) {
+        self.userList = [[NSMutableArray alloc] initWithArray: [[NSUserDefaults standardUserDefaults] objectForKey: kUserListKey]];
+        
+        self.currentUser = [self.userList objectAtIndex: 0];
+    } else {
+        self.userList = [[NSMutableArray alloc] init];
+        self.currentUser = kDefaultUser;
+        [self createNewUser: kDefaultUser];
+    }
+
+    
     return YES;
 }
 							
@@ -23,24 +43,41 @@
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
-    // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
-    // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     [[NSUserDefaults standardUserDefaults] synchronize];
+}
 
+#pragma mark PIO Create New user
+
+- (void) createNewUser: (NSString *) uname {
+    [self.userList addObject: uname];
+    [[NSUserDefaults standardUserDefaults] setObject: self.userList forKey: kUserListKey];
+    
+    [self.client createUserWithUID: uname success:
+     ^(AFHTTPRequestOperation *operation, PIOMessage *responseMessage) {
+         NSLog(@"%@", responseMessage.message);
+     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+         [self showError: error];
+     }];
+}
+
+#pragma mark - Error Helper
+
+- (void) showError: (NSError *) error {
+    UIAlertView *errorAlert = [[UIAlertView alloc] initWithTitle: @"Error" message: error.localizedDescription delegate: nil cancelButtonTitle: @"OK" otherButtonTitles: nil];
+    
+    [errorAlert show];
 }
 
 @end

@@ -10,6 +10,7 @@
 #import "PAImageView.h"
 #import "AMRatingControl.h"
 #import "PIOClient.h"
+#import "AppDelegate.h"
 
 @interface DetailViewController () {
     IBOutlet UIView *imageContainerView;
@@ -31,21 +32,34 @@
     [super viewDidLoad];
 
     self.title = @"Rate your Food!";
+    
+    self.client = ((AppDelegate *)[[UIApplication sharedApplication] delegate]).client;
+    self.user   = ((AppDelegate *)[[UIApplication sharedApplication] delegate]).currentUser;
+
     self.detailDescriptionLabel.text = self.foodEntry.name;
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible: YES];
     [self getAndSetFoodImageURL];
     
     [self addRatingControl];
+    
+    [self recordView];
 }
 
 #pragma mark - Send PIO Actions
 
 - (IBAction) makeConversion {
+    
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible: YES];
+    
     [self.client userActionItemWithUID: self.user action: @"conversion" iid: self.foodEntry.fid success:
      ^(AFHTTPRequestOperation *operation, PIOMessage *responseMessage) {
+         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible: NO];
+
          NSLog(@"Made a conversion for %@", self.foodEntry.name);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible: NO];
+
         if (error) {
             [[[UIAlertView alloc] initWithTitle: @"Conversion Error" message: [error localizedDescription] delegate: nil cancelButtonTitle: @"OK" otherButtonTitles: nil] show];
         }
@@ -53,17 +67,38 @@
 }
 
 - (void) rateFood: (int) rating {
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible: YES];
+
     PIOUserActionItemRequest *userActionItemRequest = [self.client newUserActionItemRequestWithUID: self.user action: @"rate" iid: self.foodEntry.fid];
 
-    [userActionItemRequest setValue: [NSString stringWithFormat: @"%i", rating] forKey: @"pio_rate"];
-    
+    userActionItemRequest.rate = [NSNumber numberWithInt: rating];
     [self.client userActionItemWithRequest: userActionItemRequest success:^(AFHTTPRequestOperation *operation, PIOMessage *responseMessage) {
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible: NO];
         NSLog(@"Succesfully made a rating of %i for %@", rating, self.foodEntry.name);
 
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible: NO];
+
         [[[UIAlertView alloc] initWithTitle: @"Rating Error" message: [error localizedDescription] delegate: nil cancelButtonTitle: @"OK" otherButtonTitles: nil] show];
 
     }];
+}
+
+- (void) recordView {
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible: YES];
+
+    [self.client userActionItemWithUID: self.user action: @"like" iid: self.foodEntry.fid success:
+     ^(AFHTTPRequestOperation *operation, PIOMessage *responseMessage) {
+         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible: NO];
+
+         NSLog(@"View recorded for %@", self.foodEntry.name);
+     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible: NO];
+
+         if (error) {
+             [[[UIAlertView alloc] initWithTitle: @"Conversion Error" message: [error localizedDescription] delegate: nil cancelButtonTitle: @"OK" otherButtonTitles: nil] show];
+         }
+     }];
 }
 
 #pragma mark - getting an image for the food name
@@ -95,6 +130,9 @@
     
 }
 #pragma mark - XML Parsing
+/*
+ *(from above, get the image src address)
+ */
 - (void) parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict {
     
     if ([elementName isEqualToString: @"img"]) {
@@ -135,6 +173,7 @@
     ratingControl.editingDidEndBlock = ^(NSUInteger rating)
     {
         chosenRating = (int)rating;
+        [self rateFood: chosenRating];
         didEdit = NO;
     };
     

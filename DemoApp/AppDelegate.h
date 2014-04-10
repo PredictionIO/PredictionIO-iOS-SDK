@@ -7,9 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "PIOClient.h"
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
+@property (strong, nonatomic) PIOClient *client;
+@property (strong, nonatomic) NSString *currentUser;
+@property (strong, nonatomic) NSMutableArray *userList;
+
+- (void) createNewUser: (NSString *) uname;
 
 @end
