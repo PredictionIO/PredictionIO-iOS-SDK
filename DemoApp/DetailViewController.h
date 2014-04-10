@@ -10,7 +10,7 @@
 #import "FoodEntry.h"
 #import "PIOClient.h"
 
-@interface DetailViewController : UIViewController
+@interface DetailViewController : UIViewController <NSXMLParserDelegate>
 
 @property (strong, nonatomic) FoodEntry *foodEntry;
 
