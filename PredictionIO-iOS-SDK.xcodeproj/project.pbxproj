@@ -36,6 +36,7 @@
 		FA8C250118CFBDF5007B0873 /* PIOMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = FA8C250018CFBDF5007B0873 /* PIOMessage.m */; };
 		FA8C250518CFEEB9007B0873 /* testmessage.json in Resources */ = {isa = PBXBuildFile; fileRef = FA8C250318CFEEB9007B0873 /* testmessage.json */; };
 		FA8C250618CFEEB9007B0873 /* testuser.json in Resources */ = {isa = PBXBuildFile; fileRef = FA8C250418CFEEB9007B0873 /* testuser.json */; };
+		FA93702C18F72BED00C7C120 /* UserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA93702B18F72BED00C7C120 /* UserViewController.m */; };
 		FA93C88318F5E10300CCE57A /* PAImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = FA93C88218F5E10300CCE57A /* PAImageView.m */; };
 		FA93C88618F5E12600CCE57A /* AMRatingControl.m in Sources */ = {isa = PBXBuildFile; fileRef = FA93C88518F5E12600CCE57A /* AMRatingControl.m */; };
 		FABC307518F464C600453EC6 /* food_simple.json in Resources */ = {isa = PBXBuildFile; fileRef = FABC307418F464C600453EC6 /* food_simple.json */; };
@@ -123,6 +124,8 @@
 		FA8C250018CFBDF5007B0873 /* PIOMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PIOMessage.m; sourceTree = "<group>"; };
 		FA8C250318CFEEB9007B0873 /* testmessage.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testmessage.json; sourceTree = "<group>"; };
 		FA8C250418CFEEB9007B0873 /* testuser.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testuser.json; sourceTree = "<group>"; };
+		FA93702A18F72BED00C7C120 /* UserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserViewController.h; sourceTree = "<group>"; };
+		FA93702B18F72BED00C7C120 /* UserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserViewController.m; sourceTree = "<group>"; };
 		FA93C88118F5E10300CCE57A /* PAImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAImageView.h; sourceTree = "<group>"; };
 		FA93C88218F5E10300CCE57A /* PAImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAImageView.m; sourceTree = "<group>"; };
 		FA93C88418F5E12600CCE57A /* AMRatingControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMRatingControl.h; sourceTree = "<group>"; };
@@ -330,18 +333,20 @@
 		FADFDB0118F36A74006AFD8A /* DemoApp */ = {
 			isa = PBXGroup;
 			children = (
-				FABC307618F4686600453EC6 /* External Libraries */,
-				FADFDB3018F36AAC006AFD8A /* SampleData */,
+				FADFDB0D18F36A74006AFD8A /* Main.storyboard */,
 				FADFDB0A18F36A74006AFD8A /* AppDelegate.h */,
 				FADFDB0B18F36A74006AFD8A /* AppDelegate.m */,
-				FADFDB0D18F36A74006AFD8A /* Main.storyboard */,
 				FADFDB1018F36A74006AFD8A /* MasterViewController.h */,
 				FADFDB1118F36A74006AFD8A /* MasterViewController.m */,
-				FA40EAF618F49247002AFB2C /* FoodEntry.h */,
-				FA40EAF718F49247002AFB2C /* FoodEntry.m */,
 				FADFDB1318F36A74006AFD8A /* DetailViewController.h */,
 				FADFDB1418F36A74006AFD8A /* DetailViewController.m */,
+				FA93702A18F72BED00C7C120 /* UserViewController.h */,
+				FA93702B18F72BED00C7C120 /* UserViewController.m */,
+				FA40EAF618F49247002AFB2C /* FoodEntry.h */,
+				FA40EAF718F49247002AFB2C /* FoodEntry.m */,
 				FADFDB1618F36A74006AFD8A /* Images.xcassets */,
+				FABC307618F4686600453EC6 /* External Libraries */,
+				FADFDB3018F36AAC006AFD8A /* SampleData */,
 				FADFDB0218F36A74006AFD8A /* Supporting Files */,
 			);
 			path = DemoApp;
@@ -520,6 +525,7 @@
 				FADFDB0C18F36A74006AFD8A /* AppDelegate.m in Sources */,
 				FADFDB1218F36A74006AFD8A /* MasterViewController.m in Sources */,
 				FA93C88318F5E10300CCE57A /* PAImageView.m in Sources */,
+				FA93702C18F72BED00C7C120 /* UserViewController.m in Sources */,
 				FA40EAF818F49247002AFB2C /* FoodEntry.m in Sources */,
 				FABC307918F4688400453EC6 /* MBProgressHUD.m in Sources */,
 				FADFDB0818F36A74006AFD8A /* main.m in Sources */,
