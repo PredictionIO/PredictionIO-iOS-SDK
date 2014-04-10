@@ -39,10 +39,37 @@
     [self addRatingControl];
 }
 
+#pragma mark - Send PIO Actions
+
+- (IBAction) makeConversion {
+    [self.client userActionItemWithUID: self.user action: @"conversion" iid: self.foodEntry.fid success:
+     ^(AFHTTPRequestOperation *operation, PIOMessage *responseMessage) {
+         NSLog(@"Made a conversion for %@", self.foodEntry.name);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        if (error) {
+            [[[UIAlertView alloc] initWithTitle: @"Conversion Error" message: [error localizedDescription] delegate: nil cancelButtonTitle: @"OK" otherButtonTitles: nil] show];
+        }
+    }];
+}
+
+- (void) rateFood: (int) rating {
+    PIOUserActionItemRequest *userActionItemRequest = [self.client newUserActionItemRequestWithUID: self.user action: @"rate" iid: self.foodEntry.fid];
+
+    [userActionItemRequest setValue: [NSString stringWithFormat: @"%i", rating] forKey: @"pio_rate"];
+    
+    [self.client userActionItemWithRequest: userActionItemRequest success:^(AFHTTPRequestOperation *operation, PIOMessage *responseMessage) {
+        NSLog(@"Succesfully made a rating of %i for %@", rating, self.foodEntry.name);
+
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        [[[UIAlertView alloc] initWithTitle: @"Rating Error" message: [error localizedDescription] delegate: nil cancelButtonTitle: @"OK" otherButtonTitles: nil] show];
+
+    }];
+}
+
+#pragma mark - getting an image for the food name
 /*
  * Use http://image_name.jpg.to to get the image, where "image_name" is the name of the item, and parse the html to get the src img
  */
-#pragma mark - getting an image for the food name
 - (void) getAndSetFoodImageURL {
     NSString *urlName = [self.foodEntry.name stringByReplacingOccurrencesOfString:@" " withString:@"_"];
     NSURL *imageURL = [NSURL URLWithString: [NSString stringWithFormat: @"http://%@.jpg.to", urlName]];
@@ -96,7 +123,7 @@
     [ratingControl setStarWidthAndHeight: 40];
     
     // Customize the current rating if needed
-    [ratingControl setRating: 3];
+    [ratingControl setRating: 0];
     
     
     // Define block to handle events

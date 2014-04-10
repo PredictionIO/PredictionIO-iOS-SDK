@@ -21,8 +21,11 @@
 //uialertview tag identifiers
 #define kFoodNameAlertTag 0
 
+#define kDefaultUser @"DefaultUser"
+
 @interface MasterViewController () {
     MBProgressHUD *loadingHUD;
+    NSString *currentUser;
 }
 
 @property (nonatomic, strong) NSMutableArray *userList;
@@ -48,14 +51,16 @@
     self.client = [[PIOClient alloc]
                    initWithAppKey: @"l7fdO5nw5N7djl8wpmfC2YyBm8nyMoWK5lPabRPd3LEZpq6ltnlpmm0Dqg5SyJ8o"
                    apiURL: @"http://localhost:8000"];
-
     
     //create atleast one user if it doesnt exist
     if ([[NSUserDefaults standardUserDefaults] objectForKey: kUserListKey]) {
         self.userList = [[NSMutableArray alloc] initWithArray: [[NSUserDefaults standardUserDefaults] objectForKey: kUserListKey]];
+        
+        currentUser = [self.userList objectAtIndex: 0];
     } else {
         self.userList = [[NSMutableArray alloc] init];
-        [self createNewUser: @"DefaultUser"];
+        currentUser = kDefaultUser;
+        [self createNewUser: kDefaultUser];
     }
     
     
@@ -141,7 +146,7 @@
         foodEntry.fid = [userFoodEntry objectForKey: @"id"];
         foodEntry.name = [userFoodEntry objectForKey: @"name"];
         
-        [self.foodList addObject: foodEntry];
+        [self.foodList insertObject: foodEntry atIndex: 0];
     }
     
     [self.tableView reloadData];
@@ -256,7 +261,9 @@
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         FoodEntry *foodEntry = self.foodList[indexPath.row];
         DetailViewController *detailViewController = (DetailViewController *)[segue destinationViewController];
+        detailViewController.client = self.client;
         detailViewController.foodEntry = foodEntry;
+        detailViewController.user = currentUser;
     }
 }
 

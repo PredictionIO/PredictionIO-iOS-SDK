@@ -13,6 +13,8 @@
 @interface DetailViewController : UIViewController <NSXMLParserDelegate>
 
 @property (strong, nonatomic) FoodEntry *foodEntry;
+@property (strong, nonatomic) NSString *user;
+@property (strong, nonatomic) PIOClient *client;
 
 @property (weak, nonatomic) IBOutlet UILabel *detailDescriptionLabel;
 @end
