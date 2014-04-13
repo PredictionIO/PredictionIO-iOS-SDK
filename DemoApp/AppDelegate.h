@@ -16,5 +16,5 @@
 @property (strong, nonatomic) NSMutableArray *userList;
 
 - (void) createNewUser: (NSString *) uname;
-
+- (void) changeCurrentUserTo: (NSString *) user;
 @end

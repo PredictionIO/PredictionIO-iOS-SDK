@@ -13,6 +13,7 @@
 #define kDefaultUser @"DefaultUser"
 #define kUserListKey @"user_list"
 
+#define kCurrentUserKey @"current_user"
 
 #pragma mark - UIApplication Life Cycle
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -25,11 +26,13 @@
     if ([[NSUserDefaults standardUserDefaults] objectForKey: kUserListKey]) {
         self.userList = [[NSMutableArray alloc] initWithArray: [[NSUserDefaults standardUserDefaults] objectForKey: kUserListKey]];
         
-        self.currentUser = [self.userList objectAtIndex: 0];
+        self.currentUser = [[NSUserDefaults standardUserDefaults] objectForKey: kCurrentUserKey];
     } else {
         self.userList = [[NSMutableArray alloc] init];
         self.currentUser = kDefaultUser;
         [self createNewUser: kDefaultUser];
+        
+        [[NSUserDefaults standardUserDefaults] setObject: kDefaultUser forKey: kCurrentUserKey];
     }
 
     
@@ -70,6 +73,15 @@
      } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
          [self showError: error];
      }];
+}
+
+- (void) changeCurrentUserTo: (NSString *) user {
+    if ([self.userList indexOfObject: user] == NSNotFound) {
+        return;
+    }
+    
+    self.currentUser = user;
+    [[NSUserDefaults standardUserDefaults] setObject: user forKey: kCurrentUserKey];
 }
 
 #pragma mark - Error Helper

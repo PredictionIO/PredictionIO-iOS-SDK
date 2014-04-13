@@ -9,7 +9,6 @@
 #import "UserViewController.h"
 #import "AppDelegate.h"
 
-
 #define kNewUserAlertTag 0
 @interface UserViewController ()
 
@@ -35,6 +34,44 @@
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
+}
+
+#pragma mark - Change User
+
+- (IBAction) showChangeUserDialog {
+    
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    
+    UIActionSheet *userActionSheet = [[UIActionSheet alloc] initWithTitle: @"Switch to a different user" delegate: self cancelButtonTitle: nil destructiveButtonTitle: nil otherButtonTitles:  nil];
+    
+    for (NSString *user in self.userList) {
+        if (NO == [user isEqualToString: appDelegate.currentUser]) {
+            [userActionSheet addButtonWithTitle: user];
+        }
+    }
+    
+    [userActionSheet addButtonWithTitle: @"Cancel"];
+    
+    //points to 1 + the last user in the other button titles
+    userActionSheet.cancelButtonIndex = self.userList.count - 1;
+    
+    [userActionSheet showInView: self.view];
+}
+
+#pragma mark- actionsheet delegate
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == actionSheet.cancelButtonIndex || buttonIndex == actionSheet.destructiveButtonIndex) {
+        return;
+    }
+    
+    NSString *newCurrentUser = [actionSheet buttonTitleAtIndex: buttonIndex];
+    
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    [appDelegate changeCurrentUserTo: newCurrentUser];
+    
+    [self.tableView reloadData];
+    
 }
 
 #pragma mark - New User
@@ -79,37 +116,60 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.userList.count;
+    if (section == 0) {
+        return self.userList.count;
+    }
+    
+    return 1;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 50;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    return @"Select a User to view their top Food Recommendations!";
+    if (section == 0) {
+            return @"Select a User to view their top Food Recommendations!";
+    }
+    
+    return  @"";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: @"Cell" forIndexPath:indexPath];
-    
-    NSString *cellUid = [self.userList objectAtIndex: indexPath.row];
-    cell.textLabel.text = cellUid;
-    
-    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    
-    //highlight selected user
-    if ([appDelegate.currentUser isEqualToString: cellUid]) {
-        cell.textLabel.textColor = [UIColor blueColor];
-    } else {
-        cell.textLabel.textColor = [UIColor blackColor];
+    if (indexPath.section == 0) {
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: @"Cell" forIndexPath:indexPath];
+
+        NSString *cellUid = [self.userList objectAtIndex: indexPath.row];
+        cell.textLabel.text = cellUid;
+        
+        AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+        
+        //highlight selected user
+        if ([appDelegate.currentUser isEqualToString: cellUid]) {
+            cell.textLabel.textColor = self.navigationController.navigationBar.tintColor;
+        } else {
+            cell.textLabel.textColor = [UIColor blackColor];
+        }
+        
+        return cell;
     }
     
-    return cell;
+    return [tableView dequeueReusableCellWithIdentifier: @"ChangeUserCell" forIndexPath:indexPath];
+
 }
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section == 0) {
+        NSLog(@"selected user: %@", [self.userList objectAtIndex: indexPath.row]);
+    }
+}
+
 
 /*
 #pragma mark - Navigation
