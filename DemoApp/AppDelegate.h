@@ -14,6 +14,7 @@
 @property (strong, nonatomic) PIOClient *client;
 @property (strong, nonatomic) NSString *currentUser;
 @property (strong, nonatomic) NSMutableArray *userList;
+@property (nonatomic, strong) NSMutableDictionary *foodDictionary;
 
 - (void) createNewUser: (NSString *) uname;
 - (void) changeCurrentUserTo: (NSString *) user;

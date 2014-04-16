@@ -34,7 +34,8 @@
         
         [[NSUserDefaults standardUserDefaults] setObject: kDefaultUser forKey: kCurrentUserKey];
     }
-
+    
+    self.foodDictionary = [[NSMutableDictionary alloc] init];
     
     return YES;
 }

@@ -32,6 +32,7 @@
 		9ADE4BCD187161490076326B /* AFURLResponseSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ADE4BC9187161490076326B /* AFURLResponseSerialization.m */; };
 		FA40EAF818F49247002AFB2C /* FoodEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = FA40EAF718F49247002AFB2C /* FoodEntry.m */; };
 		FA40EAF918F498E8002AFB2C /* libPredictionIO-iOS-SDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A974171186CC23600BE4C94 /* libPredictionIO-iOS-SDK.a */; };
+		FA4A111018FEFCB900F82C91 /* TopRecViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA4A110F18FEFCB900F82C91 /* TopRecViewController.m */; };
 		FA8C24FD18CFBDBF007B0873 /* testitem.json in Resources */ = {isa = PBXBuildFile; fileRef = FA8C24FC18CFBDBF007B0873 /* testitem.json */; };
 		FA8C250118CFBDF5007B0873 /* PIOMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = FA8C250018CFBDF5007B0873 /* PIOMessage.m */; };
 		FA8C250518CFEEB9007B0873 /* testmessage.json in Resources */ = {isa = PBXBuildFile; fileRef = FA8C250318CFEEB9007B0873 /* testmessage.json */; };
@@ -119,6 +120,8 @@
 		9ADE4BC9187161490076326B /* AFURLResponseSerialization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AFURLResponseSerialization.m; path = "PredictionIO-iOS-SDK/3rdParty/AFNetworking/AFURLResponseSerialization.m"; sourceTree = "<group>"; };
 		FA40EAF618F49247002AFB2C /* FoodEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FoodEntry.h; sourceTree = "<group>"; };
 		FA40EAF718F49247002AFB2C /* FoodEntry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FoodEntry.m; sourceTree = "<group>"; };
+		FA4A110E18FEFCB900F82C91 /* TopRecViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TopRecViewController.h; sourceTree = "<group>"; };
+		FA4A110F18FEFCB900F82C91 /* TopRecViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TopRecViewController.m; sourceTree = "<group>"; };
 		FA8C24FC18CFBDBF007B0873 /* testitem.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testitem.json; sourceTree = "<group>"; };
 		FA8C24FF18CFBDF5007B0873 /* PIOMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PIOMessage.h; sourceTree = "<group>"; };
 		FA8C250018CFBDF5007B0873 /* PIOMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PIOMessage.m; sourceTree = "<group>"; };
@@ -342,6 +345,8 @@
 				FADFDB1418F36A74006AFD8A /* DetailViewController.m */,
 				FA93702A18F72BED00C7C120 /* UserViewController.h */,
 				FA93702B18F72BED00C7C120 /* UserViewController.m */,
+				FA4A110E18FEFCB900F82C91 /* TopRecViewController.h */,
+				FA4A110F18FEFCB900F82C91 /* TopRecViewController.m */,
 				FA40EAF618F49247002AFB2C /* FoodEntry.h */,
 				FA40EAF718F49247002AFB2C /* FoodEntry.m */,
 				FADFDB1618F36A74006AFD8A /* Images.xcassets */,
@@ -530,6 +535,7 @@
 				FABC307918F4688400453EC6 /* MBProgressHUD.m in Sources */,
 				FADFDB0818F36A74006AFD8A /* main.m in Sources */,
 				FADFDB1518F36A74006AFD8A /* DetailViewController.m in Sources */,
+				FA4A111018FEFCB900F82C91 /* TopRecViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

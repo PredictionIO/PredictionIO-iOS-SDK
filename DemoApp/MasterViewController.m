@@ -26,8 +26,8 @@
     MBProgressHUD *loadingHUD;
 }
 
-@property (nonatomic, strong) NSMutableArray *foodList;
 @property (nonatomic, strong) PIOClient *client;
+@property (nonatomic, strong) NSMutableArray *foodList;
 
 @end
 
@@ -98,11 +98,12 @@
     
     NSArray *foods = [foodJson objectForKey: @"foods"];
 
-    NSMutableDictionary *fidDictionary = [[NSMutableDictionary alloc] init];
+    
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     
     for (NSDictionary *foodObject in foods) {
         
-        if ([fidDictionary objectForKey: [foodObject objectForKey: @"id"]]) {
+        if ([appDelegate.foodDictionary objectForKey: [foodObject objectForKey: @"id"]]) {
             continue;
         }
         
@@ -113,7 +114,7 @@
         
         [self.foodList addObject: foodEntry];
         
-        [fidDictionary setObject: @"exists" forKey: foodEntry.fid];
+        [appDelegate.foodDictionary setObject: foodEntry forKey: foodEntry.fid];
     }
     
     NSLog(@"%lu", (unsigned long)self.foodList.count);
@@ -124,6 +125,8 @@
 - (void) loadUserCreatedData {
     NSArray *userCreatedFoods = [[NSUserDefaults standardUserDefaults] arrayForKey: kUserCreatedFoodListKey];
     
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    
     for (NSDictionary *userFoodEntry in userCreatedFoods) {
         FoodEntry *foodEntry = [FoodEntry new];
         
@@ -131,6 +134,7 @@
         foodEntry.name = [userFoodEntry objectForKey: @"name"];
         
         [self.foodList insertObject: foodEntry atIndex: 0];
+        [appDelegate.foodDictionary setObject: foodEntry forKey: foodEntry.fid];
     }
     
     [self.tableView reloadData];
