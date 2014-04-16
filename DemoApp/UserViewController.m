@@ -8,6 +8,7 @@
 
 #import "UserViewController.h"
 #import "AppDelegate.h"
+#import "TopRecViewController.h"
 
 #define kNewUserAlertTag 0
 @interface UserViewController ()
@@ -167,6 +168,11 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 0) {
         NSLog(@"selected user: %@", [self.userList objectAtIndex: indexPath.row]);
+        
+        TopRecViewController *topRecViewController = [self.storyboard instantiateViewControllerWithIdentifier: @"TopRecViewController"];
+        topRecViewController.selectedUser = [self.userList objectAtIndex: indexPath.row];
+        
+        [self.navigationController pushViewController: topRecViewController animated: YES];
     }
 }
 

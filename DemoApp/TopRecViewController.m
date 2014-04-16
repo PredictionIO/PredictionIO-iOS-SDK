@@ -14,7 +14,6 @@
 @interface TopRecViewController ()
 
 @property (nonatomic, strong) NSMutableArray *recommendedFoodList;
-@property (nonatomic, strong) NSString *selectedUser;
 @end
 
 @implementation TopRecViewController
@@ -22,6 +21,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.title = [NSString stringWithFormat: @"%@'s Predictions", self.selectedUser];
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible: YES];
     self.recommendedFoodList = [[NSMutableArray alloc] init];
@@ -42,7 +43,9 @@
     
     PIOClient *client = ((AppDelegate *)[[UIApplication sharedApplication] delegate]).client;
     
-    [client getItemRecTopNWithEngine: @"item-rec-attr" uid: self.selectedUser n: 15 success:
+    #warning Rec Engine Name specified below, it must match what is on the admin panel
+    
+    [client getItemRecTopNWithEngine: @"item-rec" uid: self.selectedUser n: 15 success:
      ^(AFHTTPRequestOperation *operation, id responseObject) {
          [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible: NO];
 

@@ -87,7 +87,7 @@
 - (void) recordView {
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible: YES];
 
-    [self.client userActionItemWithUID: self.user action: @"like" iid: self.foodEntry.fid success:
+    [self.client userActionItemWithUID: self.user action: @"view" iid: self.foodEntry.fid success:
      ^(AFHTTPRequestOperation *operation, PIOMessage *responseMessage) {
          [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible: NO];
 
@@ -96,7 +96,7 @@
          [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible: NO];
 
          if (error) {
-             [[[UIAlertView alloc] initWithTitle: @"Conversion Error" message: [error localizedDescription] delegate: nil cancelButtonTitle: @"OK" otherButtonTitles: nil] show];
+             [[[UIAlertView alloc] initWithTitle: @"View Error" message: [error localizedDescription] delegate: nil cancelButtonTitle: @"OK" otherButtonTitles: nil] show];
          }
      }];
 }

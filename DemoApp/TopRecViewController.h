@@ -10,4 +10,6 @@
 
 @interface TopRecViewController : UITableViewController
 
+@property (nonatomic, strong) NSString *selectedUser;
+
 @end
