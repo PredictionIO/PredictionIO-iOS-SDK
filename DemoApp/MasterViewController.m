@@ -98,7 +98,6 @@
     
     NSArray *foods = [foodJson objectForKey: @"foods"];
 
-    
     AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     
     for (NSDictionary *foodObject in foods) {
@@ -217,6 +216,8 @@
 
     FoodEntry *foodEntry = self.foodList[indexPath.row];
     cell.textLabel.text = foodEntry.name;
+    [cell.textLabel setFont: [UIFont fontWithName: @"HelveticaNeue" size: 18]];
+
     return cell;
 }
 

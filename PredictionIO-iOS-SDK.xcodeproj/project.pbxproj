@@ -439,11 +439,6 @@
 			attributes = {
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = PredictionIO;
-				TargetAttributes = {
-					9A974180186CC23600BE4C94 = {
-						TestTargetID = FADFDAFB18F36A74006AFD8A;
-					};
-				};
 			};
 			buildConfigurationList = 9A97416C186CC23600BE4C94 /* Build configuration list for PBXProject "PredictionIO-iOS-SDK" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -672,7 +667,6 @@
 		9A974198186CC23600BE4C94 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/DemoApp.app/DemoApp";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -686,7 +680,6 @@
 				);
 				INFOPLIST_FILE = "PredictionIO-iOS-SDKTests/PredictionIO-iOS-SDKTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
 			name = Debug;
@@ -694,7 +687,6 @@
 		9A974199186CC23600BE4C94 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/DemoApp.app/DemoApp";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -704,7 +696,6 @@
 				GCC_PREFIX_HEADER = "PredictionIO-iOS-SDK/PredictionIO-iOS-SDK-Prefix.pch";
 				INFOPLIST_FILE = "PredictionIO-iOS-SDKTests/PredictionIO-iOS-SDKTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
 			name = Release;

@@ -10,6 +10,7 @@
 #import "AppDelegate.h"
 #import "PIOClient.h"
 #import "FoodEntry.h"
+#import "DetailViewController.h"
 
 @interface TopRecViewController ()
 
@@ -81,13 +82,33 @@
 }
 
 
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 55.0;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: @"Cell" forIndexPath:indexPath];
+
+    FoodEntry *foodEntry = [self.recommendedFoodList objectAtIndex: indexPath.row];
     
-    cell.textLabel.text = ((FoodEntry *)[self.recommendedFoodList objectAtIndex: indexPath.row]).name;
+    [cell.textLabel setFont: [UIFont fontWithName: @"HelveticaNeue" size: 22]];
+    cell.textLabel.text = [NSString stringWithFormat: @"%li. %@", (long)indexPath.row + 1, foodEntry.name];
+    
     
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    FoodEntry *foodEntry = [self.recommendedFoodList objectAtIndex: indexPath.row];
+    
+    DetailViewController *detailViewController = [self.storyboard instantiateViewControllerWithIdentifier: @"DetailViewController"];
+    detailViewController.foodEntry = foodEntry;
+    detailViewController.user = self.selectedUser;
+    
+    [self.navigationController pushViewController: detailViewController animated: YES];
 }
 
 

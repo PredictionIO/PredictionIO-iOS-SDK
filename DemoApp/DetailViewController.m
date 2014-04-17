@@ -34,7 +34,11 @@
     self.title = @"Rate your Food!";
     
     self.client = ((AppDelegate *)[[UIApplication sharedApplication] delegate]).client;
-    self.user   = ((AppDelegate *)[[UIApplication sharedApplication] delegate]).currentUser;
+    
+    //if user not set, take current selected user
+    if(self.user == nil) {
+        self.user   = ((AppDelegate *)[[UIApplication sharedApplication] delegate]).currentUser;
+    }
 
     self.detailDescriptionLabel.text = self.foodEntry.name;
     

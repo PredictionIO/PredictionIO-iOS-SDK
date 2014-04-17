@@ -25,7 +25,7 @@
     //create atleast one user if it doesnt exist
     if ([[NSUserDefaults standardUserDefaults] objectForKey: kUserListKey]) {
         self.userList = [[NSMutableArray alloc] initWithArray: [[NSUserDefaults standardUserDefaults] objectForKey: kUserListKey]];
-        
+
         self.currentUser = [[NSUserDefaults standardUserDefaults] objectForKey: kCurrentUserKey];
     } else {
         self.userList = [[NSMutableArray alloc] init];
