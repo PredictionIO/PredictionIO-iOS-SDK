@@ -65,7 +65,9 @@
     failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible: NO];
 
-        [[[UIAlertView alloc] initWithTitle: @"Error" message: error.localizedDescription delegate: nil cancelButtonTitle: @"OK" otherButtonTitles: nil] show];
+        NSString *errorMessage = [NSString stringWithFormat: @"%@. Make sure the training of the data model has occured and the PredictionIO server is up and running.", error.localizedDescription];
+        
+        [[[UIAlertView alloc] initWithTitle: @"Error" message: errorMessage delegate: nil cancelButtonTitle: @"OK" otherButtonTitles: nil] show];
     }];
 }
 

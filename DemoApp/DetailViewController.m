@@ -46,7 +46,7 @@
     [self getAndSetFoodImageURL];
     
     [self addRatingControl];
-    
+
     [self recordView];
 }
 
