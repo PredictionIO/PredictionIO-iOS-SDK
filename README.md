@@ -1,6 +1,6 @@
 #PredictionIO iOS SDK
 
-###PredictioIO API 
+###PredictionIO API 
 See http://docs.prediction.io/current/apis/index.html for full documentation of API endpoints. (An iOS SDK specific client documentation  will be here soon).
 
 ###Demo App: The Food Predictor
