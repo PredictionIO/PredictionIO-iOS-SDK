@@ -1,9 +1,9 @@
 #PredictionIO iOS SDK
 
-###PredictionIO API 
+##PredictionIO API 
 See http://docs.prediction.io/current/apis/index.html for full documentation of API endpoints. (An iOS SDK specific client documentation  will be here soon).
 
-###Demo App: The Food Predictor
+##Demo App: The Food Predictor
 The main functionality of the app is to show food recommendations. The app allows creation of multiple users, and makes it possible to switch between the users. For each user, we can perform different actions and therefore each user will have different custom recommendations. Selecting a user shows the top N recommended foods for each user.
 
 The app has a list of all the food items and users can add new foods. On the first run, the items are all added to the local PredictionIO server. When a user selects one of the foods, it sends a “view” action to the item. The user can also give the food a rating, and make a conversion and the corresponding U2I actions are sent to the PredictionIO server.
