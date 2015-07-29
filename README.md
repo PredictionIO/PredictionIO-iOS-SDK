@@ -1,31 +1,105 @@
-#PredictionIO iOS SDK
+# PredictionIO Swift SDK
 
-##PredictionIO API 
-See http://docs.prediction.io/current/apis/index.html for full documentation of API endpoints. (An iOS SDK specific client documentation  will be here soon).
+[![Build Status](https://travis-ci.org/minhtule/PredictionIO-Swift-SDK.svg?branch=master)]
+(https://travis-ci.org/minhtule/PredictionIO-Swift-SDK)
 
-##Demo App: The Food Predictor
-The main functionality of the app is to show food recommendations. The app allows creation of multiple users, and makes it possible to switch between the users. For each user, we can perform different actions and therefore each user will have different custom recommendations. Selecting a user shows the top N recommended foods for each user.
+The Swift SDK provides a convenient API for your iOS and OS X application to record your users' behaviors in the event server and retrieve predictions from PredictionIO engines.
 
-The app has a list of all the food items and users can add new foods. On the first run, the items are all added to the local PredictionIO server. When a user selects one of the foods, it sends a “view” action to the item. The user can also give the food a rating, and make a conversion and the corresponding U2I actions are sent to the PredictionIO server.
+## Requirements
+- iOS 7.0+ or OS X 10.9+
+- Xcode 6.1
 
-###First time setup
-* In `DemoApp/AppDelegate.m` set the API Key and API URL here:
-```
-self.client = [[PIOClient alloc]
-                initWithAppKey: @"l7fdO5nw5N7djl8wpmfC2YyBm8nyMoWK5lPabRPd3LEZpq6ltnlpmm0Dqg5SyJ8o"
-                apiURL: @"http://localhost:8000"];
-```
-* Create a recommendation engine in the PredictionIO admin app, and give it the name `item-rec`. This can be changed by editing the hardcoded name in `DemoApp/TopRecViewController.m` at 
-```
- [client getItemRecTopNWithEngine: @"item-rec" uid: self.selectedUser n: 15 success:
-     ^(AFHTTPRequestOperation *operation, id responseObject) {
+## Installation
+
+### Cocoapods
+Only CocoaPods 0.36.0 beta (and rc1) supports Swift and embedded frameworks. So CocoaPods needs to be installed with the following command.
+```bash
+$ gem install cocoapods --pre
 ```
 
-###How to run the demo
+Add the following lines to your `Podfile`.
+```ruby
+# platform must be at least iOS 8.0 to use dynamic frameworks
+platform :ios, '8.0'
+use_frameworks!
 
-1. Open `PredictionIO-iOS-SDK.xcodeproj`
-2. Ensure your local PredictionIO server is up and running
-3. Select the `DemoApp` scheme, and choose any iPhone simultator
-4. Press the "Play" button or do `Product > Run`, and that's it.
+pod 'PredictionIOSDK', :git => 'https://github.com/minhtule/PredictionIO-Swift-SDK.git'
+```
 
-Note that the data takes some time to train, so it may take a little while before you see data under the user recommendations section of the app.
+Then run the following command.
+```bash
+$ pod install 
+```
+
+Finally, import the SDK in your Swift files before using.
+```swift
+import PredictionIOSDK
+```
+
+### Manually
+You can just drag two files: `PredictionIOSDK.swift` and `Alamofire.swift` into your project. 
+
+**Note** that `Alamofire.swift` has been slightly modified from the original; however, if you have already integrated the original `Alamofire.swift` file to your project, you don't need to include `Alamofire.swift` from this repo again.
+
+## Usage
+
+### EngineClient
+Use `EngineClient` to query predictions from the PredictionIO Engines.
+
+```swift
+let engineClient = EngineClient(baseURL: "http://localhost:8000")
+let query = [
+    "user": 1,
+    "num": 2
+]
+        
+engineClient.sendQuery(query) { (request, response, JSON, error) in
+    if let data = JSON as? [String: [[String: AnyObject]]] {
+        ...
+    }
+    ...
+}
+```
+
+### EventClient
+Use `EventClient` to send information to the PredictionIO Event Server.
+
+```swift
+let eventClient = EventClient(accessKey: accessKey, baseURL: "http://localhost:7070")
+let event = Event(
+    event: "rate",
+    entityType: "user",
+    entityID: "1",
+    targetEntityType: "item",
+    targetEntityID: "9",
+    properties: [
+        "rating": 5
+    ]
+)
+
+eventClient.createEvent(event) { (request, response, JSON, error) in
+    ...
+}
+```
+
+There are other convenient methods to modify user's or item's properties. Please see the [API documentation](http://minhtule.github.io/PredictionIO-Swift-SDK/index.html) for more details.
+
+## Documentation
+The latest API documentation is available at http://minhtule.github.io/PredictionIO-Swift-SDK/index.html.
+
+## iOS Demo App
+Please follow this [quick guide](http://docs.prediction.io/templates/recommendation/quickstart/) to start the Event Server and set up a Recommendation Engine on your local machine first.
+
+You also need to:
+- Include your app's access key in `DataCollectorViewController.swift`.
+- Import some data using the python script as instructed in step 4b. Alternatively, you can use the demo app to record new rating events; however, remember to re-train and deploy the engine before querying for recommendations.
+- Run the iPhone or iPad simulator!
+
+There are 2 screens in the demo app:
+- **Data Collector**: corresponding to step *4a. Collecting Data* in the quick guide.
+- **Item Recommendation**: corresponding to step *6. Use the Engine* in the quick guide.
+
+## License
+PredictionIO Swift SDK is released under the Apache License 2.0. Please see
+[LICENSE](https://github.com/minhtule/PredictionIO-Swift-SDK/blob/master/LICENSE) for details.
+
